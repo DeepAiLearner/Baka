@@ -1,0 +1,64 @@
+@import "../../variables";
+
+$--color-pink: $color-pink-deep !default;
+$--color-primary: $color-blue-normal !default;
+
+#calibur-tv {
+  .el-tabs__active-bar.is-top {
+    height: 1px;
+
+    &:after {
+      content: '';
+      position: absolute;
+      margin-left: -3px;
+      left: 50%;
+      bottom: 1px;
+      width: 0;
+      height: 0;
+      border: 3px solid $color-blue-normal;
+      border-top-width: 0;
+      border-left-color: transparent;
+      border-right-color: transparent;
+    }
+  }
+
+  .el-tabs__nav-wrap.is-top:after {
+    height: 1px;
+  }
+
+  .el-popover {
+    padding: 0;
+  }
+
+  .el-checkbox__input.is-checked + .el-checkbox__label {
+    color: #606266;
+  }
+
+  .el-upload-list--picture-card {
+    &:before, &:after {
+      content: none;
+    }
+  }
+
+  .el-loading-mask {
+    position: fixed;
+  }
+
+  .el-message {
+    min-width: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+    user-select: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+
+    .el-message__content {
+      color: rgba(0, 0, 0, 0.65);
+    }
+  }
+}
+
+$--font-path: '../../../../node_modules/element-ui/lib/theme-chalk/fonts';
+@import "~element-ui/packages/theme-chalk/src/index";
