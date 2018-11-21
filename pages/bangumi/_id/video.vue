@@ -1,24 +1,32 @@
-<style lang="scss">
-</style>
-
 <template>
-  <div>
-    bangumi video
-  </div>
+  <bangumi-video-flow/>
 </template>
 
 <script>
+import BangumiVideoFlow from '~/components/bangumi/BangumiVideoFlow'
+
 export default {
-  name: '',
-  components: {},
-  props: {},
-  data() {
-    return {}
+  name: 'BangumiVideo',
+  async asyncData({ store, route, ctx }) {
+    await store.dispatch('bangumi/getVideos', {
+      ctx,
+      id: route.params.id
+    })
   },
-  computed: {},
-  watch: {},
-  created() {},
-  mounted() {},
-  methods: {}
+  components: {
+    BangumiVideoFlow
+  },
+  computed: {
+    info() {
+      return this.$store.state.bangumi.info
+    }
+  },
+  mounted() {
+    if (!this.info.has_video) {
+      this.$router.replace({
+        name: 'bangumi-post'
+      })
+    }
+  }
 }
 </script>

@@ -1,9 +1,13 @@
 export default ctx => {
-  const isClient = !ctx.req
+  const isClient = typeof window !== 'undefined'
   if (isClient && window.__JWT_TOKEN__) {
     return window.__JWT_TOKEN__
   }
-  const cookies = isClient ? document.cookie : ctx.req.headers.cookie
+  const cookies = ctx
+    ? isClient
+      ? document.cookie
+      : ctx.req.headers.cookie
+    : ''
   if (!cookies) {
     return ''
   }

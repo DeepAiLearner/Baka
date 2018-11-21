@@ -71,6 +71,7 @@ module.exports = {
     '~/plugins/element-ui',
     '~/plugins/prototype',
     '~/plugins/components',
+    '~/plugins/env',
     { src: '~/plugins/utils', ssr: false }
   ],
 

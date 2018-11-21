@@ -1,24 +1,31 @@
-<style lang="scss">
-</style>
-
 <template>
-  <div>
-    bangumi role
-  </div>
+  <cartoon-role-flow-list
+    v-if="info"
+    :bangumi-id="info.id"
+    :bangumi-name="info.name"
+  />
 </template>
 
 <script>
+import CartoonRoleFlowList from '~/components/flow/list/CartoonRoleFlowList'
+
 export default {
-  name: '',
-  components: {},
-  props: {},
-  data() {
-    return {}
+  name: 'BangumiCartoonRole',
+  async asyncData({ store, route, ctx }) {
+    await store.dispatch('flow/initData', {
+      type: 'role',
+      sort: 'hot',
+      bangumiId: route.params.id,
+      ctx
+    })
   },
-  computed: {},
-  watch: {},
-  created() {},
-  mounted() {},
-  methods: {}
+  components: {
+    CartoonRoleFlowList
+  },
+  computed: {
+    info() {
+      return this.$store.state.bangumi.info
+    }
+  }
 }
 </script>

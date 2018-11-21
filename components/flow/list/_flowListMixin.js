@@ -27,10 +27,7 @@ export default {
       return 'world/initData'
     },
     fetchStore() {
-      if (this.bangumiId || this.userZone) {
-        return 'flow'
-      }
-      return 'world'
+      return 'flow'
     },
     fetchSort() {
       if (this.userZone) {

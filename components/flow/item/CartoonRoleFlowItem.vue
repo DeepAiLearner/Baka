@@ -143,7 +143,7 @@
       >
         <span>守护者：</span>
         <user-card
-          :id="item.lover.id"
+          :id="+item.lover.id"
           :zone="item.lover.zone"
         >
           <span v-text="item.lover.nickname"/>

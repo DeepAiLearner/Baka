@@ -212,7 +212,7 @@ export default {
         }
       }
     },
-    onMainAnimationEnd(event) {
+    onMainAnimationEnd() {
       this.transforming = false
       this.$emit('expanded')
     },

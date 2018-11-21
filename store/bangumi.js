@@ -250,11 +250,11 @@ export const actions = {
     const data = await api.bangumiScore(id)
     commit('SET_BANGUMI_SCORE', { data, id })
   },
-  async getRecommended({ state, commit }) {
+  async getRecommended({ state, commit }, ctx) {
     if (state.recommended.length) {
       return
     }
-    const api = new Api(this)
+    const api = new Api(ctx)
     const data = await api.recommended()
     commit('SET_RECOMMENDED', data)
   }
