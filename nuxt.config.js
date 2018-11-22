@@ -1,9 +1,10 @@
 const qiniu = require('./qiniu')
 const webpack = require('webpack')
-const CompressionPlugin = require('compression-webpack-plugin')
 const isDev = process.env.NODE_ENV === 'development'
 const path = require('path')
 const resolve = file => path.resolve(__dirname, file)
+const CompressionPlugin = require('compression-webpack-plugin')
+const BrotliPlugin = require('brotli-webpack-plugin')
 
 module.exports = {
   mode: 'universal',
@@ -69,10 +70,9 @@ module.exports = {
   */
   plugins: [
     '~/plugins/element-ui',
-    '~/plugins/prototype',
-    '~/plugins/components',
-    '~/plugins/env',
-    { src: '~/plugins/utils', ssr: false }
+    '~/plugins/prototype-global',
+    '~/plugins/global-components',
+    { src: '~/plugins/prototype-client', ssr: false }
   ],
 
   /*
@@ -82,6 +82,7 @@ module.exports = {
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/style-resources'
   ],
+
   styleResources: {
     sass: ['./assets/css/variables.scss', './assets/css/mixins.scss']
   },
@@ -103,6 +104,7 @@ module.exports = {
       config.resolve.alias['create-api'] = isClient
         ? resolve('./api/_create-api-client.js')
         : resolve('./api/_create-api-server.js')
+      config.resolve.alias.env = resolve('./.env.js')
     },
     extractCSS: true,
     plugins: (() => {
@@ -111,7 +113,10 @@ module.exports = {
         ? result.concat([])
         : result.concat([
             new CompressionPlugin({
-              test: /\.js$|\.css$/
+              test: /\.(js|css|html)$/
+            }),
+            new BrotliPlugin({
+              test: /\.(js|css|html)$/
             })
           ])
     })(),

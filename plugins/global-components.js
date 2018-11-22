@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Time from '~/assets/js/timeago'
+import NotSSR from '~/assets/js/notssr'
 import Hr from '~/components/common/Hr'
 import Header from '~/components/layouts/Header'
 import Dialog from '~/components/common/Dialog'
@@ -15,6 +16,7 @@ import NoContent from '~/components/NoContent'
 
 Vue.use(VueClipboards)
 Vue.use(ImageLazyLoad, {})
+Vue.component(NotSSR.name, NotSSR)
 Vue.component(Header.name, Header)
 Vue.component(Layout.name, Layout)
 Vue.component(Time.name, Time)

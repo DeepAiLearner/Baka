@@ -18,6 +18,9 @@
     <no-ssr>
       <side-tools/>
     </no-ssr>
+    <no-ssr>
+      <v-sign/>
+    </no-ssr>
   </div>
 </template>
 
@@ -25,13 +28,15 @@
 import vFooter from '~/components/layouts/Footer'
 import vMusic from '~/components/layouts/Music'
 import SideTools from '~/components/layouts/SideTools'
+import vSign from '~/components/layouts/Sign'
 
 export default {
   name: 'DefaultLayout',
   components: {
     vFooter,
     SideTools,
-    vMusic
+    vMusic,
+    vSign
   }
 }
 </script>

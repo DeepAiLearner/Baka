@@ -1,6 +1,6 @@
 <style lang="scss">
 .first-sign-dialog {
-  background-image: url('~img/first-sign-dialog-bg.svg');
+  background-image: url('~/assets/img/first-sign-dialog-bg.svg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;

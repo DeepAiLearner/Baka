@@ -3,7 +3,6 @@ import parseToken from '~/assets/js/parseToken'
 
 class Http {
   constructor(ctx) {
-    console.log(process.env.baseUrl)
     this.instance = axios.create({
       baseURL: process.env.baseUrl,
       headers: {

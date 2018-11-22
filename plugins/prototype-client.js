@@ -7,6 +7,7 @@ import { MessageBox } from 'element-ui'
 import QRCode from '~/assets/js/qrcode'
 import Toast from '~/assets/js/toast'
 
+// TODO：精简这里，没必要 global 的就去掉
 Vue.use({
   install(Vue) {
     Vue.prototype.$cookie = Cookies
@@ -14,6 +15,8 @@ Vue.use({
     Vue.prototype.$scrollToY = scrollToY
 
     Vue.prototype.$backdrop = new Backdrop()
+
+    Vue.prototype.$channel = new Vue()
 
     Vue.prototype.$toast = Toast
 

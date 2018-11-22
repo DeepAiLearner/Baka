@@ -1,5 +1,5 @@
 export default {
-  name: 'no-ssr',
+  name: 'not-ssr',
   props: ['placeholder'],
   data() {
     return {

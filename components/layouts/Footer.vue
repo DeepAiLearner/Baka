@@ -182,7 +182,7 @@ export default {
   },
   computed: {
     show() {
-      return ['homepage', 'invite-user'].indexOf(this.$route.name) === -1
+      return ['index', 'about-invite-id'].indexOf(this.$route.name) === -1
     },
     friends() {
       return this.$store.state.pageData

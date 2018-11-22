@@ -54,7 +54,7 @@ function getOffset(element) {
 
 /* eslint-disable */
 export default {
-  name: "VAffix",
+  name: 'VAffix',
   props: {
     offsetTop: {
       type: Number,
@@ -71,102 +71,102 @@ export default {
       slot: false,
       slotStyle: {},
       eventIds: []
-    };
+    }
   },
   computed: {
     offsetType() {
-      let type = "top";
+      let type = 'top'
       if (this.offsetBottom >= 0) {
-        type = "bottom";
+        type = 'bottom'
       }
 
-      return type;
+      return type
     },
     classes() {
       return [
         {
           [`${prefixCls}`]: this.affix
         }
-      ];
+      ]
     }
   },
   mounted() {
-    this.eventIds = utils.on(window, ["scroll", "resize"], this.handleScroll);
+    this.eventIds = utils.on(window, ['scroll', 'resize'], this.handleScroll)
   },
   beforeDestroy() {
-    utils.off(this.eventIds);
+    utils.off(this.eventIds)
   },
   methods: {
     handleScroll() {
-      const point = this.$refs.point;
+      const point = this.$refs.point
       if (!point) {
-        return;
+        return
       }
-      const affix = this.affix;
-      const scrollTop = getScroll(window, true);
-      const elOffset = getOffset(this.$el);
-      const windowHeight = window.innerHeight;
-      const elHeight = this.$el.getElementsByTagName("div")[0].offsetHeight;
+      const affix = this.affix
+      const scrollTop = getScroll(window, true)
+      const elOffset = getOffset(this.$el)
+      const windowHeight = window.innerHeight
+      const elHeight = this.$el.getElementsByTagName('div')[0].offsetHeight
 
       // Fixed Top
       if (
         elOffset.top - this.offsetTop < scrollTop &&
-        this.offsetType === "top" &&
+        this.offsetType === 'top' &&
         !affix
       ) {
-        this.affix = true;
+        this.affix = true
         this.slotStyle = {
-          width: point.clientWidth + "px",
-          height: point.clientHeight + "px"
-        };
-        this.slot = true;
+          width: point.clientWidth + 'px',
+          height: point.clientHeight + 'px'
+        }
+        this.slot = true
         this.styles = {
           top: `${this.offsetTop}px`,
           left: `${elOffset.left}px`,
           width: `${this.$el.offsetWidth}px`
-        };
+        }
 
-        this.$emit("on-change", true);
+        this.$emit('on-change', true)
       } else if (
         elOffset.top - this.offsetTop > scrollTop &&
-        this.offsetType === "top" &&
+        this.offsetType === 'top' &&
         affix
       ) {
-        this.slot = false;
-        this.slotStyle = {};
-        this.affix = false;
-        this.styles = null;
+        this.slot = false
+        this.slotStyle = {}
+        this.affix = false
+        this.styles = null
 
-        this.$emit("on-change", false);
+        this.$emit('on-change', false)
       }
 
       // Fixed Bottom
       if (
         elOffset.top + this.offsetBottom + elHeight >
           scrollTop + windowHeight &&
-        this.offsetType === "bottom" &&
+        this.offsetType === 'bottom' &&
         !affix
       ) {
-        this.affix = true;
+        this.affix = true
         this.styles = {
           bottom: `${this.offsetBottom}px`,
           left: `${elOffset.left}px`,
           width: `${this.$el.offsetWidth}px`
-        };
+        }
 
-        this.$emit("on-change", true);
+        this.$emit('on-change', true)
       } else if (
         elOffset.top + this.offsetBottom + elHeight <
           scrollTop + windowHeight &&
-        this.offsetType === "bottom" &&
+        this.offsetType === 'bottom' &&
         affix
       ) {
-        this.affix = false;
-        this.styles = null;
+        this.affix = false
+        this.styles = null
 
-        this.$emit("on-change", false);
+        this.$emit('on-change', false)
       }
     }
   }
-};
+}
 </script>

@@ -1,4 +1,4 @@
-<style lang="scss" module>
+<style lang="scss">
 .subtitle {
   font-weight: 300;
   font-size: 42px;
@@ -15,21 +15,25 @@
     margin-top: 15px;
   }
 }
+
+.ok {
+  text-decoration: line-through;
+}
 </style>
 
 <template>
   <section>
     <v-header type="pure"/>
     <v-layout>
-      <h2 :class="$style.subtitle">
+      <h2 class="subtitle">
         calibur.tv sitemap
       </h2>
-      <div :class="$style.links">
+      <div class="links">
         <p>社区：</p>
-        <nuxt-link to="/world/post">帖子</nuxt-link>
-        <nuxt-link to="/world/pins">相册</nuxt-link>
-        <nuxt-link to="/world/review">漫评</nuxt-link>
-        <nuxt-link to="/world/qaq">问答</nuxt-link>
+        <nuxt-link to="/world/post"><span class="ok">帖子</span></nuxt-link>
+        <nuxt-link to="/world/pins"><span class="ok">相册</span></nuxt-link>
+        <nuxt-link to="/world/review"><span class="ok">漫评</span></nuxt-link>
+        <nuxt-link to="/world/qaq"><span class="ok">问答</span></nuxt-link>
         <p>番剧：</p>
         <nuxt-link to="/bangumi/news">新番放送</nuxt-link>
         <nuxt-link to="/bangumi/timeline">时间轴</nuxt-link>

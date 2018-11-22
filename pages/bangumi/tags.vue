@@ -68,7 +68,8 @@
   >
     <v-header
       type="banner"
-      banner="https://image.calibur.tv/banner/3.png"/>
+      banner="https://image.calibur.tv/banner/3.png"
+    />
     <v-layout :affix-top="235">
       <div class="breadcrumb-links">
         <router-link :to="$alias.bangumiNews">新番放送</router-link>

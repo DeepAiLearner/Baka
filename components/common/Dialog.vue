@@ -78,82 +78,84 @@
 </style>
 
 <template>
-  <el-dialog
-    :width="width"
-    :custom-class="customClass"
-    :append-to-body="true"
-    :show-close="false"
-    :visible.sync="dialogVisible"
-    :before-close="beforeClose"
-    :fullscreen="fullscreen"
-    :close-on-click-modal="clickClose"
-    :close-on-press-escape="clickClose"
-  >
-    <section :class="$style.container">
-      <header
-        v-if="header"
-        slot="header"
-        :class="$style.header"
-      >
-        <slot name="title">
-          <h4
-            :class="$style.title"
-            v-text="title"
-          />
-        </slot>
-      </header>
-      <button
-        v-if="!clickClose || close"
-        :class="$style.close"
-        @click="cancel"
-      >&times;</button>
-      <main
-        :style="computeDialogHeight"
-        :class="$style.content"
-        @scroll="handleScroll"
-      >
-        <template v-if="scroll">
-          <ul ref="ul">
-            <slot/>
-          </ul>
-          <slot
-            v-if="loading"
-            :class="$style.loading"
-            name="loading"
-          >
-            <p :class="$style.loading">加载中...</p>
+  <not-ssr>
+    <el-dialog
+      :width="width"
+      :custom-class="customClass"
+      :append-to-body="true"
+      :show-close="false"
+      :visible.sync="dialogVisible"
+      :before-close="beforeClose"
+      :fullscreen="fullscreen"
+      :close-on-click-modal="clickClose"
+      :close-on-press-escape="clickClose"
+    >
+      <section :class="$style.container">
+        <header
+          v-if="header"
+          slot="header"
+          :class="$style.header"
+        >
+          <slot name="title">
+            <h4
+              :class="$style.title"
+              v-text="title"
+            />
           </slot>
-          <slot
-            v-else-if="noMore"
-            :class="$style.noMore"
-            name="nomore"
-          >
-            <p :class="$style.noMore">没有更多了</p>
+        </header>
+        <button
+          v-if="!clickClose || close"
+          :class="$style.close"
+          @click="cancel"
+        >&times;</button>
+        <main
+          :style="computeDialogHeight"
+          :class="$style.content"
+          @scroll="handleScroll"
+        >
+          <template v-if="scroll">
+            <ul ref="ul">
+              <slot/>
+            </ul>
+            <slot
+              v-if="loading"
+              :class="$style.loading"
+              name="loading"
+            >
+              <p :class="$style.loading">加载中...</p>
+            </slot>
+            <slot
+              v-else-if="noMore"
+              :class="$style.noMore"
+              name="nomore"
+            >
+              <p :class="$style.noMore">没有更多了</p>
+            </slot>
+          </template>
+          <slot v-else/>
+        </main>
+        <footer
+          v-if="footer"
+          :class="$style.footer"
+        >
+          <slot name="footer">
+            <button
+              v-if="cancelText"
+              :class="$style.cancel"
+              @click="cancel"
+              v-text="cancelText"
+            />
+            <button
+              :loading="loading"
+              :class="[$style.submit, `btn-${theme}`]"
+              @click="submit"
+              v-text="submitText"
+            />
           </slot>
-        </template>
-        <slot v-else/>
-      </main>
-      <footer
-        v-if="footer"
-        :class="$style.footer"
-      >
-        <slot name="footer">
-          <button
-            v-if="cancelText"
-            :class="$style.cancel"
-            @click="cancel"
-            v-text="cancelText"
-          />
-          <button
-            :loading="loading"
-            :class="[$style.submit, `btn-${theme}`]"
-            @click="submit"
-            v-text="submitText"
-          />
-        </slot>
-      </footer>
-    </section>
-  </el-dialog>
+        </footer>
+      </section>
+    </el-dialog>
+  </not-ssr>
 </template>
 
 <script>
