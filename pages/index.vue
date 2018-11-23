@@ -80,11 +80,6 @@
         <p>创作：</p>
         <nuxt-link to="/review/create">写漫评</nuxt-link>
         <nuxt-link to="/review/edit/1">编辑漫评</nuxt-link>
-        <p>异常：</p>
-        <nuxt-link to="/error/401">401</nuxt-link>
-        <nuxt-link to="/error/403">403</nuxt-link>
-        <nuxt-link to="/error/404">404</nuxt-link>
-        <nuxt-link to="/error/500">500</nuxt-link>
       </div>
     </v-layout>
   </section>
