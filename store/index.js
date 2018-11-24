@@ -11,7 +11,7 @@ export const state = () => ({
 export const mutations = {
   SET_USER(state, user) {
     state.user = user
-    state.login = true
+    state.login = !!user.id
   },
   SET_PAGE_DATA(state, data) {
     state.pageData = data
@@ -25,6 +25,7 @@ export const actions = {
     }
     const session = parseCookie()
     if (!session) {
+      commit('SET_USER', {})
       return
     }
     const user = await getLoginUser({ session })

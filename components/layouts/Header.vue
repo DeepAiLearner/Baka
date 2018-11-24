@@ -735,6 +735,9 @@ export default {
       return this.$store.state.user
     },
     notificationsCount() {
+      if (!this.isLogin) {
+        return 0
+      }
       const result =
         this.user.notification - this.$store.state.users.notifications.checked
       return result < 0 ? 0 : result
