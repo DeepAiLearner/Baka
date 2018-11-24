@@ -29,7 +29,7 @@ export default new class {
       })
       return res.data.data
     } catch (e) {
-      e.code = e.response ? e.response.status || 500 : 500
+      e.code = e.response.status || 500
       e.message = e.response.data.message
       throw e
     }
@@ -45,7 +45,7 @@ export default new class {
       })
       return res.data.data
     } catch (e) {
-      const code = e.response ? e.response.status : 500
+      const code = e.response.status || 500
       if (code === 401) {
         return {}
       }

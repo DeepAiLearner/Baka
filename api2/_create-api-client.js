@@ -49,8 +49,8 @@ export default new class {
               message: '网络错误，请刷新网页重试！'
             })
           }
-          let message = err.response.data.message
-          const code = err.response ? err.response.status || 500 : 500
+          const message = err.response.data.message
+          const code = err.response.status
           if (typeof message === 'string') {
             return Promise.reject({
               code,
