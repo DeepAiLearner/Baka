@@ -14,21 +14,6 @@ export default {
     }
   },
   computed: {
-    fetchMoreAction() {
-      if (this.bangumiId || this.userZone) {
-        return 'flow/getData'
-      }
-      return 'world/getData'
-    },
-    fetchInitAction() {
-      if (this.bangumiId || this.userZone) {
-        return 'flow/initData'
-      }
-      return 'world/initData'
-    },
-    fetchStore() {
-      return 'flow'
-    },
     fetchSort() {
       if (this.userZone) {
         return 'news'
@@ -39,7 +24,7 @@ export default {
       return 'active'
     },
     source() {
-      return this.$store.state[this.fetchStore][this.flowType][this.fetchSort]
+      return this.$store.state.flow[this.flowType][this.fetchSort]
     },
     showNoContentTips() {
       return this.bangumiId || this.isMe
@@ -53,7 +38,7 @@ export default {
   methods: {
     async initData() {
       try {
-        await this.$store.dispatch(this.fetchInitAction, {
+        await this.$store.dispatch('flow/initData', {
           ctx: this,
           type: this.flowType,
           sort: this.fetchSort,
@@ -66,7 +51,7 @@ export default {
     },
     async loadMore() {
       try {
-        await this.$store.dispatch(this.fetchMoreAction, {
+        await this.$store.dispatch('flow/getData', {
           ctx: this,
           type: this.flowType,
           sort: this.fetchSort,

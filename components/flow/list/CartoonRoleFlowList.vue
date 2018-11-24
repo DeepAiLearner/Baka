@@ -78,10 +78,7 @@ export default {
   },
   computed: {
     roles() {
-      if (this.userZone) {
-        return this.source.list
-      }
-      return this.$utils.orderBy(this.source.list, 'star_count', 'desc')
+      return this.source.list
     }
   },
   methods: {

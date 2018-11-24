@@ -300,15 +300,27 @@
 import TabContainer from '~/components/common/TabContainer'
 import CartoonRoleFlowList from '~/components/flow/list/CartoonRoleFlowList'
 import CartoonRoleBtn from '~/components/buttons/CartoonRoleBtn'
+import {
+  getTodayActivity,
+  newbieUsers,
+  dalaoUsers
+} from '~/api2/cartoonRoleApi'
 
 export default {
   name: 'TrendingRole',
-  async asyncData({ store }) {
-    await Promise.all([
-      store.dispatch('cartoonRole/getTodayActivity'),
-      store.dispatch('cartoonRole/getDalaoUsers'),
-      store.dispatch('cartoonRole/getNewbieUsers')
+  async asyncData() {
+    const data = await Promise.all([
+      getTodayActivity(),
+      newbieUsers(),
+      dalaoUsers()
     ])
+    if (data.every(_ => _)) {
+      return {
+        todayActivity: data[0],
+        newbieUsers: data[1],
+        dalaoUsers: data[2]
+      }
+    }
   },
   head: {
     title: '角色排行榜'
@@ -330,22 +342,14 @@ export default {
       ],
       loadingActivity: false,
       timer: 0,
-      index: 0
-    }
-  },
-  computed: {
-    todayActivity() {
-      return this.$store.state.cartoonRole.todayActivity
-    },
-    dalaoUsers() {
-      return this.$store.state.cartoonRole.dalao
-    },
-    newbieUsers() {
-      return this.$store.state.cartoonRole.newbie
+      index: 0,
+      todayActivity: [],
+      dalaoUsers: [],
+      newbieUsers: []
     }
   },
   mounted() {
-    this.timer = setInterval(this.getTodayActivity, 5000)
+    this.timer = setInterval(this.getTodayActivityTrending, 5000)
   },
   beforeDestroy() {
     if (this.timer) {
@@ -356,22 +360,25 @@ export default {
   methods: {
     changeTab(index) {
       if (index === 0) {
-        this.getTodayActivity()
+        this.getTodayActivityTrending()
       } else if (index === 1) {
         this.getTrending()
       }
       this.index = index
     },
-    async getTodayActivity() {
+    async getTodayActivityTrending() {
       if (this.loadingActivity || this.index) {
         return
       }
       this.loadingActivity = true
-      await this.$store.dispatch('cartoonRole/getTodayActivity')
-      this.loadingActivity = false
+      try {
+        this.todayActivity = await getTodayActivity()
+      } finally {
+        this.loadingActivity = false
+      }
     },
     async getTrending() {
-      await this.$store.dispatch('world/initData', {
+      await this.$store.dispatch('flow/initData', {
         type: 'role',
         sort: 'hot',
         ctx: this

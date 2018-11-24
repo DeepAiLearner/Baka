@@ -1,5 +1,5 @@
 <template>
-  <no-ssr :style="{ height: size }">
+  <not-ssr :style="{ height: size }">
     <ve-radar
       :data="chartData"
       :setting="chartSettings"
@@ -11,7 +11,7 @@
       :tooltip-visible="false"
       :resizeable="false"
     />
-  </no-ssr>
+  </not-ssr>
 </template>
 
 <script>
@@ -101,11 +101,6 @@ export default {
         rows: [this.source]
       }
     }
-  },
-  computed: {},
-  watch: {},
-  created() {},
-  mounted() {},
-  methods: {}
+  }
 }
 </script>

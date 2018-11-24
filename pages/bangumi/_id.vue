@@ -5,12 +5,7 @@
   <section class="bangumi-layout">
     <bangumi-banner/>
     <v-layout>
-      <tab-container
-        :list="cards"
-        :route="false"
-        def="0"
-        @change="goPage"
-      />
+      <tab-container :list="cards"/>
       <nuxt-child/>
       <bangumi-aside slot="aside"/>
     </v-layout>
@@ -58,51 +53,45 @@ export default {
       return [
         {
           label: '帖子',
-          name: 'bangumi-post',
+          name: 'bangumi-id-post',
           show: true
         },
         {
           label: '视频',
-          name: 'bangumi-video',
+          name: 'bangumi-id-video',
           show: info.has_video
         },
         {
           label: '漫画',
-          name: 'bangumi-cartoon',
+          name: 'bangumi-id-cartoon',
           show: info.has_cartoon
         },
         {
           label: '偶像',
-          name: 'bangumi-role',
+          name: 'bangumi-id-role',
           show: true
         },
         {
           label: '相册',
-          name: 'bangumi-pins',
+          name: 'bangumi-id-pins',
           show: true
         },
         {
           label: '漫评',
-          name: 'bangumi-review',
+          name: 'bangumi-id-review',
           show: true
         },
         {
           label: '问答',
-          name: 'bangumi-qaq',
+          name: 'bangumi-id-qaq',
           show: true
         },
         {
           label: '设置',
-          name: 'bangumi-setting',
+          name: 'bangumi-id-setting',
           show: info.is_master
         }
       ].filter(_ => _.show)
-    }
-  },
-  methods: {
-    goPage(index) {
-      const tab = this.cards[index]
-      tab && this.$router.push('/' + tab.name.replace('-', '/' + this.id + '/'))
     }
   }
 }
