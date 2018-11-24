@@ -1,5 +1,5 @@
 import axios from 'axios'
-import parseToken from '~/assets/js/parseToken'
+import parseCookie from '~/assets/js/parseCookie'
 
 const pendingQueue = {}
 const timeout = 15000
@@ -32,7 +32,7 @@ export default ctx => {
       return config
     }
     Object.assign(config.headers, {
-      Authorization: `Bearer ${parseToken(ctx)}`
+      Authorization: `Bearer ${parseCookie()}`
     })
     return config
   })

@@ -175,10 +175,7 @@
 
 <template>
   <div id="trending-role">
-    <v-header
-      type="banner"
-      banner="https://image.calibur.tv/banner/3.png"
-    />
+    <v-header type="banner"/>
     <v-layout>
       <tab-container
         :list="pages"

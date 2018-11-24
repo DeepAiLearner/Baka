@@ -510,73 +510,75 @@ $search-height: 32px;
             </v-search>
             <v-search-history/>
           </div>
-          <template v-if="isLogin">
-            <el-popover
-              ref="popover"
-              width="320"
-              placement="bottom-end"
-              trigger="click"
-            >
-              <v-notifications v-if="showNotification"/>
-              <span v-else/>
-            </el-popover>
-            <el-badge
-              v-if="notificationsCount"
-              :value="notificationsCount"
-              :max="99"
-              class="item"
-            >
+          <template v-if="user">
+            <template v-if="isLogin">
+              <el-popover
+                ref="popover"
+                width="320"
+                placement="bottom-end"
+                trigger="click"
+              >
+                <v-notifications v-if="showNotification"/>
+                <span v-else/>
+              </el-popover>
+              <el-badge
+                v-if="notificationsCount"
+                :value="notificationsCount"
+                :max="99"
+                class="item"
+              >
+                <a
+                  v-popover:popover
+                  :class="$style.navLink"
+                  @click="showNotification = true"
+                >
+                  <span>消息</span>
+                </a>
+              </el-badge>
               <a
                 v-popover:popover
+                v-else
                 :class="$style.navLink"
                 @click="showNotification = true"
               >
                 <span>消息</span>
               </a>
-            </el-badge>
-            <a
-              v-popover:popover
-              v-else
-              :class="$style.navLink"
-              @click="showNotification = true"
-            >
-              <span>消息</span>
-            </a>
-            <el-dropdown
-              :class="$style.userSection"
-              placement="bottom"
-            >
-              <a
-                :href="$alias.user(user.zone)"
-                target="_blank"
-                class="el-dropdown-link"
+              <el-dropdown
+                :class="$style.userSection"
+                placement="bottom"
               >
-                <v-img
-                  :src="user.avatar"
-                  :class="$style.avatar"
-                  :avatar="true"
-                  :lazy="false"
-                  size="34"
-                />
-              </a>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>
-                  <button @click="signOut">退出</button>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </template>
-          <template v-else>
-            <button
-              :class="[$style.signBtn, $style.signIn]"
-              class="sign-in"
-              @click="signIn"
-            ><span>登录</span></button>
-            <button
-              :class="[$style.signBtn, $style.signUp]"
-              class="sign-up"
-              @click="signUp"
-            ><span>注册</span></button>
+                <a
+                  :href="$alias.user(user.zone)"
+                  target="_blank"
+                  class="el-dropdown-link"
+                >
+                  <v-img
+                    :src="user.avatar"
+                    :class="$style.avatar"
+                    :avatar="true"
+                    :lazy="false"
+                    size="34"
+                  />
+                </a>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>
+                    <button @click="signOut">退出</button>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </template>
+            <template v-else>
+              <button
+                :class="[$style.signBtn, $style.signIn]"
+                class="sign-in"
+                @click="signIn"
+              ><span>登录</span></button>
+              <button
+                :class="[$style.signBtn, $style.signUp]"
+                class="sign-up"
+                @click="signUp"
+              ><span>注册</span></button>
+            </template>
           </template>
         </div>
       </div>

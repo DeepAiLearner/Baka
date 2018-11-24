@@ -1,5 +1,5 @@
 import axios from 'axios'
-import parseToken from '~/assets/js/parseToken'
+import parseCookie from '~/assets/js/parseCookie'
 
 class Http {
   constructor(ctx) {
@@ -7,7 +7,7 @@ class Http {
       baseURL: process.env.baseUrl,
       headers: {
         Accept: 'application/x.api.latest+json',
-        Authorization: `Bearer ${parseToken(ctx)}`
+        Authorization: `Bearer ${parseCookie(ctx.req)}`
       },
       timeout: 10000
     })

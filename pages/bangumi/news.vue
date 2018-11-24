@@ -62,10 +62,7 @@
 
 <template>
   <div id="bangumi-news">
-    <v-header
-      type="banner"
-      banner="https://image.calibur.tv/banner/3.png"
-    />
+    <v-header type="banner"/>
     <v-layout :affix-top="235">
       <div class="breadcrumb-links">
         <nuxt-link :to="$alias.bangumiNews">新番放送</nuxt-link>

@@ -1,5 +1,9 @@
 import http from 'create-http'
 
+export const getPageData = () => {
+  return http.get('door/data', { refer: 'pc' })
+}
+
 export const getCarousel = () => {
   return http.get('cm/loop/list')
 }

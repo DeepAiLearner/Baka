@@ -56,10 +56,7 @@
 
 <template>
   <div id="about-hello">
-    <v-header
-      type="banner"
-      banner="https://image.calibur.tv/banner/3.png"
-    />
+    <v-header type="banner"/>
     <v-layout>
       <h1>欢迎来到 calibur.tv</h1>
       <p>在开始之前，你应该了解一下这个网站的规则，这有助于让你得到更好使用的体验，让我们开始吧！</p>
