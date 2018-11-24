@@ -72,41 +72,33 @@
     />
     <v-layout :affix-top="235">
       <div class="breadcrumb-links">
-        <router-link :to="$alias.bangumiNews">新番放送</router-link>
-        <router-link :to="$alias.bangumiTimeline">时间轴</router-link>
-        <router-link :to="$alias.bangumiTag()">分类索引</router-link>
+        <nuxt-link :to="$alias.bangumiNews">新番放送</nuxt-link>
+        <nuxt-link :to="$alias.bangumiTag()">分类索引</nuxt-link>
       </div>
       <div class="tags">
         <h2 class="sub-title">标签列表</h2>
         <ul>
           <li
-            v-for="(tag, index) in tags"
+            v-for="tag in tags"
             :key="tag.id"
-            @click="$store.commit('bangumi/selectTag', index)"
+            @click="selectTag(tag)"
           >
             <a
-              :href="$alias.bangumiTag(tag.id)"
               :class="{ 'selected': tag.selected }"
+              href="javascript:;"
               class="tag-btn"
-              @click.prevent
             >{{ tag.name }}</a>
-          </li>
-          <li>
-            <button
-              class="btn"
-              @click="refresh"
-            >点击查找</button>
           </li>
         </ul>
       </div>
       <div
-        v-if="bangumis && bangumis.length"
+        v-if="bangumis.total"
         class="bangumis"
       >
         <h2 class="sub-title">番剧列表</h2>
         <ul>
           <li
-            v-for="item in bangumis"
+            v-for="item in bangumis.data"
             :key="item.id"
             class="bangumi"
           >
@@ -136,15 +128,15 @@
           </li>
         </ul>
         <load-more-btn
-          :no-more="noMore"
+          :no-more="bangumis.noMore"
           :loading="loading"
           :auto="true"
-          @fetch="loadMore"
+          @fetch="loadBangumis"
         />
       </div>
-      <no-content v-else-if="id"/>
+      <no-content v-else-if="showEmpty"/>
       <template slot="aside">
-        <bangumi-recommended/>
+        <bangumi-recommended :bangumis="recommendedBangumis"/>
       </template>
     </v-layout>
   </div>
@@ -152,80 +144,91 @@
 
 <script>
 import BangumiRecommended from '~/components/bangumi/BangumiRecommended'
+import {
+  getAllBangumiTag,
+  getRecommendedBangumis,
+  getCategoryBangumis
+} from '~/api2/bangumiApi'
 
 export default {
   name: 'BangumiTags',
+  async asyncData() {
+    const data = await Promise.all([
+      getAllBangumiTag(),
+      getRecommendedBangumis()
+    ])
+    if (data.every(_ => _)) {
+      return {
+        recommendedBangumis: data[1],
+        tags: data[0].map(_ => {
+          return Object.assign(_, {
+            selected: false
+          })
+        })
+      }
+    }
+  },
   components: {
     BangumiRecommended
   },
   head: {
     title: '分类索引 - 番剧'
   },
-  async asyncData({ route, store, ctx }) {
-    const id = route.query.id
-    const arr = [
-      store.dispatch('bangumi/getTags', { id, ctx }),
-      store.dispatch('bangumi/getRecommended')
-    ]
-    if (
-      id &&
-      (/^\d+$/.test(id) ||
-        (id.indexOf('-') !== -1 &&
-          id.split('-').every(item => /^\d+$/.test(item))))
-    ) {
-      arr.push(
-        store.dispatch('bangumi/getCategory', {
-          id,
-          ctx
-        })
-      )
-    }
-    await Promise.all(arr)
-  },
   data() {
     return {
-      loading: false
+      tags: [],
+      recommendedBangumis: [],
+      loading: false,
+      bangumis: {
+        data: [],
+        noMore: false,
+        page: 0,
+        take: 10,
+        total: 0
+      }
     }
   },
   computed: {
-    id() {
-      return this.$route.query.id
-    },
-    bangumis() {
-      return this.$store.state.bangumi.category.data
-    },
-    tags() {
-      return this.$store.state.bangumi.tags
-    },
-    noMore() {
-      return this.$store.state.bangumi.category.noMore
+    showEmpty() {
+      return this.tags.some(_ => _.selected) && !this.loading
     }
   },
   methods: {
-    refresh() {
-      const selected = []
-      this.tags.forEach(tag => {
-        if (tag.selected) {
-          selected.push(tag.id)
-        }
-      })
-      if (selected.length) {
-        window.location = this.$alias.bangumiTag(selected.join('-'))
+    selectTag(tag) {
+      if (this.loading) {
+        return
       }
+      tag.selected = !tag.selected
+      this.bangumis = {
+        data: [],
+        noMore: false,
+        page: 0,
+        take: 10,
+        total: 0
+      }
+      this.loadBangumis()
     },
-    async loadMore() {
-      if (this.notFetch) {
+    async loadBangumis() {
+      if (this.loading || this.bangumis.noMore) {
         return
       }
       this.loading = true
 
       try {
-        await this.$store.dispatch('bangumi/getCategory', {
-          id: this.$route.query.id,
-          ctx: this
+        const data = await getCategoryBangumis({
+          page: this.bangumis.page,
+          take: this.bangumis.take,
+          tags: this.tags
+            .filter(_ => _.selected)
+            .map(_ => _.id)
+            .join('-')
         })
+        this.bangumis.data = this.bangumis.data.concat(data.list)
+        this.bangumis.noMore = data.noMore
+        this.bangumis.total = data.total
+        this.bangumis.page++
       } catch (e) {
-        this.$toast.error(e)
+        this.$toast.error(e.message)
       } finally {
         this.loading = false
       }

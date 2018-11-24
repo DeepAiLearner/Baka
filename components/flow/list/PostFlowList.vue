@@ -51,6 +51,9 @@ export default {
     },
     postList() {
       if (!this.bangumiId) {
+        if (!this.source) {
+          return []
+        }
         return this.source.list
       }
       return this.source

@@ -3,12 +3,6 @@ import ScoreApi from '~/api/scoreApi'
 
 export const state = () => ({
   follows: null,
-  released: [],
-  timeline: {
-    data: [],
-    year: new Date().getFullYear(),
-    noMore: false
-  },
   category: {
     data: [],
     noMore: false,
@@ -36,21 +30,10 @@ export const state = () => ({
   topPosts: [],
   topFetchedId: 0,
   score: null,
-  scoreFetchId: 0,
-  recommended: []
+  scoreFetchId: 0
 })
 
 export const mutations = {
-  SET_RECOMMENDED(state, data) {
-    const shuffle = array => {
-      for (let i = array.length; i; i--) {
-        let j = Math.floor(Math.random() * i)
-        ;[array[i - 1], array[j]] = [array[j], array[i - 1]]
-      }
-      return array
-    }
-    state.recommended = shuffle(data)
-  },
   FETCH_SOCIAL_USERS(state, { type, result }) {
     const prefix = state.info[`${type}_users`]
     state.info[`${type}_users`].list = prefix.list.concat(result.list)
@@ -70,15 +53,6 @@ export const mutations = {
   SET_FOLLOW(state, { result }) {
     state.info.followed = result
     result ? state.info.follow_users.total++ : state.info.follow_users.total--
-  },
-  SET_RELEASED(state, data) {
-    state.released = data
-  },
-  SET_TIMELINE(state, data) {
-    const temp = state.timeline
-    state.timeline.data = temp.data.concat(data.list)
-    state.timeline.year = temp.year - 1
-    state.timeline.noMore = data.noMore
   },
   SET_TAGS(state, { tags, id }) {
     const ids = id ? id.split('-') : undefined
@@ -178,25 +152,6 @@ export const actions = {
     })
     return followed
   },
-  async getReleased({ state, commit }, ctx) {
-    if (state.released.length) {
-      return
-    }
-    const api = new Api(ctx)
-    const data = await api.released()
-    commit('SET_RELEASED', data)
-  },
-  async getTimeline({ state, commit }, ctx) {
-    if (state.timeline.noMore) {
-      return
-    }
-    const api = new Api(ctx)
-    const data = await api.timeline({
-      year: state.timeline.year,
-      take: state.timeline.take
-    })
-    commit('SET_TIMELINE', data)
-  },
   async getCategory({ state, commit }, { id, ctx }) {
     const api = new Api(ctx)
     const data = await api.category({
@@ -249,14 +204,6 @@ export const actions = {
     const api = new ScoreApi(ctx)
     const data = await api.bangumiScore(id)
     commit('SET_BANGUMI_SCORE', { data, id })
-  },
-  async getRecommended({ state, commit }, ctx) {
-    if (state.recommended.length) {
-      return
-    }
-    const api = new Api(ctx)
-    const data = await api.recommended()
-    commit('SET_RECOMMENDED', data)
   }
 }
 

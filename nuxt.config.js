@@ -87,11 +87,18 @@ module.exports = {
     sass: ['./assets/css/variables.scss', './assets/css/mixins.scss']
   },
 
+  /**
+   * Global middleware
+   */
+  router: {
+    middleware: ['session']
+  },
+
   /*
   ** Build configuration
   */
   build: {
-    extend(config, { isDev, isClient, isServer, loaders }) {
+    extend(config, { isDev, isClient }) {
       // Run ESLint on save
       if (isDev && isClient) {
         config.module.rules.push({
@@ -104,6 +111,9 @@ module.exports = {
       config.resolve.alias['create-api'] = isClient
         ? resolve('./api/_create-api-client.js')
         : resolve('./api/_create-api-server.js')
+      config.resolve.alias['create-http'] = isClient
+        ? resolve('./api2/_create-api-client.js')
+        : resolve('./api2/_create-api-server.js')
       config.resolve.alias.env = resolve('./.env.js')
     },
     extractCSS: true,

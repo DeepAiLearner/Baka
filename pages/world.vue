@@ -139,7 +139,7 @@
           <li><nuxt-link to="/world/review">漫评</nuxt-link></li>
           <li><nuxt-link to="/world/qaq">问答</nuxt-link></li>
         </ul>
-        <user-recommended/>
+        <user-recommended :users="recommendedUsers"/>
       </template>
       <div class="col-main">
         <el-carousel
@@ -180,33 +180,31 @@
 
 <script>
 import UserRecommended from '~/components/user/UserRecommended'
+import { getCarousel } from '~/api2/carouselApi'
+import { getRecommendedUsers } from '~/api2/userApi'
 
 export default {
   name: 'TheWorld',
   components: {
     UserRecommended
   },
-  async asyncData({ store }) {
-    await Promise.all([
-      store.dispatch('users/getRecommended'),
-      store.dispatch('cm/getCmLoop')
-    ])
+  async asyncData() {
+    const data = await Promise.all([getRecommendedUsers(), getCarousel()])
+    if (data.every(_ => _)) {
+      return {
+        recommendedUsers: data[0],
+        loops: data[1]
+      }
+    }
   },
   head: {
     title: '站内热点'
   },
-  props: {},
   data() {
-    return {}
-  },
-  computed: {
-    loops() {
-      return this.$store.state.cm.loops
+    return {
+      recommendedUsers: [],
+      loops: []
     }
-  },
-  watch: {},
-  created() {},
-  mounted() {},
-  methods: {}
+  }
 }
 </script>

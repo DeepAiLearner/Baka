@@ -455,50 +455,50 @@ $search-height: 32px;
     <div :class="navClassList">
       <div :class="$style.text">
         <v-layout>
-          <router-link
+          <nuxt-link
             v-if="type === 'pure' || scrollFlag"
             :class="$style.logo"
             to="/"
           >
             <img :src="$resize('owner/logo-new/logo.png', { width: 80 })">
-          </router-link>
-          <router-link
+          </nuxt-link>
+          <nuxt-link
             v-else
             :class="[$style.navLink, $style.first]"
             to="/"
           >
             <span>首页</span>
-          </router-link>
-          <router-link
+          </nuxt-link>
+          <nuxt-link
             :class="$style.navLink"
             to="/world"
           >
             <span>社区</span>
-          </router-link>
-          <router-link
+          </nuxt-link>
+          <nuxt-link
             :class="$style.navLink"
             :to="$alias.bangumiNews"
           >
             <span>番剧</span>
-          </router-link>
-          <router-link
+          </nuxt-link>
+          <nuxt-link
             :to="$alias.roleTrending"
             :class="$style.navLink"
           >
             <span>偶像</span>
-          </router-link>
-          <router-link
+          </nuxt-link>
+          <nuxt-link
             :class="$style.navLink"
             to="/about/hello"
           >
             <span>功能简介</span>
-          </router-link>
-          <router-link
+          </nuxt-link>
+          <nuxt-link
             :class="$style.navLink"
             to="/app/download"
           >
             <span>下载APP</span>
-          </router-link>
+          </nuxt-link>
         </v-layout>
         <div :class="$style.right">
           <div class="search-container">

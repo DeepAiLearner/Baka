@@ -35,9 +35,8 @@
         <nuxt-link to="/world/review"><span class="ok">漫评</span></nuxt-link>
         <nuxt-link to="/world/qaq"><span class="ok">问答</span></nuxt-link>
         <p>番剧：</p>
-        <nuxt-link to="/bangumi/news">新番放送</nuxt-link>
-        <nuxt-link to="/bangumi/timeline">时间轴</nuxt-link>
-        <nuxt-link to="/bangumi/tags">分类索引</nuxt-link>
+        <nuxt-link to="/bangumi/news"><span class="ok">新番放送</span></nuxt-link>
+        <nuxt-link to="/bangumi/tags"><span class="ok">分类索引</span></nuxt-link>
         &nbsp;|&nbsp;
         <nuxt-link to="/bangumi/3/post">帖子</nuxt-link>
         <nuxt-link to="/bangumi/3/video">视频</nuxt-link>

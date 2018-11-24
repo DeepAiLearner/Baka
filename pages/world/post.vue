@@ -54,14 +54,14 @@
           <p>
             「贴吧」板块讨论的话题应该更加的轻松一些，大家天马星空的想法都可以在此发表，
             如果你想写一篇专业的漫评，可以到
-            <router-link :to="$alias.world('review')">「漫评」</router-link>
+            <nuxt-link :to="$alias.world('review')">「漫评」</nuxt-link>
             板块发文；
           </p>
           <p>
             如果你想为你喜欢的动漫角色盖楼，那么非常荣幸的告诉你，我们为 “盖楼” 专门开发了一个
-            <router-link :to="$alias.roleTrending">「应援」</router-link>
+            <nuxt-link :to="$alias.roleTrending">「应援」</nuxt-link>
             系统，每次应援都需要消耗
-            <router-link to="/about/hello">「团子」</router-link>
+            <nuxt-link to="/about/hello">「团子」</nuxt-link>
             ，而不是谁的 “水军” 多谁就可以排名靠前；
           </p>
           <p>

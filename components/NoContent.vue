@@ -40,7 +40,7 @@
 <template>
   <div id="no-content">
     <img
-      :src="$resize(`${$cdn.image}owner/no-content`, { width: 400 })"
+      :src="$resize(`https://image.calibur.tv/owner/no-content`, { width: 400 })"
       alt="no-content"
     >
     <div>

@@ -68,8 +68,7 @@
     />
     <v-layout :affix-top="235">
       <div class="breadcrumb-links">
-        <router-link :to="$alias.bangumiNews">新番放送</router-link>
-        <router-link :to="$alias.bangumiTimeline">时间轴</router-link>
+        <nuxt-link :to="$alias.bangumiNews">新番放送</nuxt-link>
         <a :href="$alias.bangumiTag()">分类索引</a>
       </div>
       <tab-container
@@ -138,7 +137,7 @@
         </div>
       </tab-container>
       <template slot="aside">
-        <bangumi-recommended/>
+        <bangumi-recommended :bangumis="recommendedBangumis"/>
       </template>
     </v-layout>
   </div>
@@ -147,6 +146,7 @@
 <script>
 import BangumiRecommended from '~/components/bangumi/BangumiRecommended'
 import TabContainer from '~/components/common/TabContainer'
+import { getReleasedBangumis, getRecommendedBangumis } from '~/api2/bangumiApi'
 
 export default {
   name: 'BangumiNews',
@@ -157,14 +157,22 @@ export default {
   head: {
     title: '新番放送 - 番剧'
   },
-  async asyncData(ctx) {
-    await Promise.all([
-      ctx.store.dispatch('bangumi/getReleased', ctx),
-      ctx.store.dispatch('bangumi/getRecommended', ctx)
+  async asyncData() {
+    const data = await Promise.all([
+      getReleasedBangumis(),
+      getRecommendedBangumis()
     ])
+    if (data.every(_ => _)) {
+      return {
+        released: data[0],
+        recommendedBangumis: data[1]
+      }
+    }
   },
   data() {
     return {
+      released: [],
+      recommendedBangumis: [],
       showtime: [
         { label: '最新' },
         { label: '周一' },
@@ -176,11 +184,6 @@ export default {
         { label: '周日' }
       ],
       thisWeek: `${new Date().getDay() || 7}`
-    }
-  },
-  computed: {
-    released() {
-      return this.$store.state.bangumi.released
     }
   },
   methods: {
