@@ -15,3 +15,11 @@ export const getAllBangumiTag = () => {
 export const getCategoryBangumis = ({ tags, page, take }) => {
   return http.get('bangumi/category', { id: tags, page, take })
 }
+
+export const getBangumiVideos = ({ id }) => {
+  return http.get(`bangumi/${id}/videos`)
+}
+
+export const getBangumiScore = ({ id }) => {
+  return http.get('score/bangumis', { id })
+}

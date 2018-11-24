@@ -54,7 +54,7 @@
     <section v-if="videos.total">
       <div v-if="videos.has_season">
         <div
-          v-for="season in videos.list"
+          v-for="season in videos.videos"
           :key="season.name"
         >
           <h3
@@ -116,33 +116,28 @@
         </li>
       </ul>
     </section>
-    <no-content v-else-if="videos.fetched">
-      <el-button
-        type="primary"
-        round
-        @click="openFeedback"
-      >求资源</el-button>
-    </no-content>
   </div>
 </template>
 
 <script>
 export default {
   name: 'BangumiVideoFlow',
+  props: {
+    videos: {
+      type: [Array, Object],
+      required: true
+    },
+    info: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       state: {
         loading: false,
         fetched: false
       }
-    }
-  },
-  computed: {
-    info() {
-      return this.$store.state.bangumi.info
-    },
-    videos() {
-      return this.$store.state.bangumi.videos
     }
   },
   methods: {

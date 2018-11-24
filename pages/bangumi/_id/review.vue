@@ -149,13 +149,14 @@
 <script>
 import BangumiScoreChart from '~/components/bangumi/charts/BangumiScoreChart'
 import ScoreFlowList from '~/components/flow/list/ScoreFlowList'
+import { getBangumiScore } from '~/api2/bangumiApi'
 
 export default {
   name: 'BangumiScore',
-  async asyncData({ store, route, ctx }) {
-    const id = route.params.id
-    await Promise.all([
-      store.dispatch('bangumi/getBangumiScore', { ctx, id }),
+  async asyncData({ store, ctx, params }) {
+    const { id } = params
+    const data = await Promise.all([
+      getBangumiScore({ id }),
       store.dispatch('flow/initData', {
         type: 'score',
         sort: 'active',
@@ -163,17 +164,24 @@ export default {
         ctx
       })
     ])
+    if (data[0]) {
+      return {
+        bangumiScore: data[0]
+      }
+    }
   },
   components: {
     BangumiScoreChart,
     ScoreFlowList
   },
+  data() {
+    return {
+      bangumiScore: null
+    }
+  },
   computed: {
     info() {
       return this.$store.state.bangumi.info
-    },
-    bangumiScore() {
-      return this.$store.state.bangumi.score
     },
     totalRate() {
       return this.bangumiScore.total / 20

@@ -1,20 +1,33 @@
 <template>
-  <bangumi-video-flow/>
+  <bangumi-video-flow
+    :videos="videos"
+    :info="info"
+  />
 </template>
 
 <script>
 import BangumiVideoFlow from '~/components/bangumi/BangumiVideoFlow'
+import { getBangumiVideos } from '~/api2/bangumiApi'
 
 export default {
   name: 'BangumiVideo',
-  async asyncData({ store, route, ctx }) {
-    await store.dispatch('bangumi/getVideos', {
-      ctx,
-      id: route.params.id
+  async asyncData({ params }) {
+    const data = await getBangumiVideos({
+      id: params.id
     })
+    if (data) {
+      return {
+        videos: data
+      }
+    }
   },
   components: {
     BangumiVideoFlow
+  },
+  data() {
+    return {
+      videos: []
+    }
   },
   computed: {
     info() {
