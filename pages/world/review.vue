@@ -77,12 +77,12 @@ import ScoreFlowList from '~/components/flow/list/ScoreFlowList'
 
 export default {
   name: 'ScoreWorld',
-  async asyncData({ store, ctx }) {
+  async asyncData({ store, session }) {
     await Promise.all([
       store.dispatch('flow/getData', {
         type: 'score',
         sort: 'active',
-        ctx
+        session
       }),
       store.dispatch('flow/getMeta', { type: 'score' })
     ])

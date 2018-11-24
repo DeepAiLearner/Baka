@@ -377,8 +377,7 @@ export default {
     async getTrending() {
       await this.$store.dispatch('flow/initData', {
         type: 'role',
-        sort: 'hot',
-        ctx: this
+        sort: 'hot'
       })
     },
     handleSuccess() {

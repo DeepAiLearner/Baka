@@ -81,12 +81,12 @@ import ImageFlowList from '~/components/flow/list/ImageFlowList'
 
 export default {
   name: 'ImageWorld',
-  async asyncData({ store, ctx }) {
+  async asyncData({ store, session }) {
     await Promise.all([
       store.dispatch('flow/getData', {
         type: 'image',
         sort: 'active',
-        ctx
+        session
       }),
       store.dispatch('flow/getMeta', { type: 'image' })
     ])

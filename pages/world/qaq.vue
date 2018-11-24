@@ -61,12 +61,12 @@ import QuestionFlowList from '~/components/flow/list/QuestionFlowList'
 
 export default {
   name: 'QuestionWorld',
-  async asyncData({ store, ctx }) {
+  async asyncData({ store, session }) {
     await Promise.all([
       store.dispatch('flow/getData', {
         type: 'question',
         sort: 'active',
-        ctx
+        session
       }),
       store.dispatch('flow/getMeta', { type: 'question' })
     ])

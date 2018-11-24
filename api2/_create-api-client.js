@@ -1,7 +1,9 @@
 import axios from 'axios'
+import parseCookie from '~/assets/js/parseCookie'
 
 const timeout = 15000
 const pendingQueue = {}
+
 const createRequestKey = (url, params = {}) => {
   if (!params) {
     return `GET-${url}`
@@ -12,12 +14,13 @@ const createRequestKey = (url, params = {}) => {
   })
   return url.slice(0, -1)
 }
-const makeAuthHeader = params => {
-  let headers = {}
-  if (params && params.session) {
-    headers.Authorization = `Bearer ${params.session}`
-  }
-  return headers
+const makeAuthHeader = () => {
+  const token = parseCookie()
+  return token
+    ? {
+        Authorization: `Bearer ${token}`
+      }
+    : {}
 }
 
 export default new class {
@@ -79,7 +82,7 @@ export default new class {
       method: 'POST',
       url: arguments[0],
       data,
-      headers: makeAuthHeader(data)
+      headers: makeAuthHeader()
     })
   }
 
@@ -95,7 +98,7 @@ export default new class {
         method: 'GET',
         url,
         params,
-        headers: makeAuthHeader(params)
+        headers: makeAuthHeader()
       })
         .then(res => {
           resolve(res)

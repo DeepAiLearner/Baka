@@ -1,5 +1,8 @@
 export default req => {
   const isClient = typeof window !== 'undefined'
+  if (isClient && window.__JWT_TOKEN__) {
+    return window.__JWT_TOKEN__
+  }
   const cookies = isClient ? document.cookie : req ? req.headers.cookie : ''
   if (!cookies) {
     return ''
@@ -11,5 +14,8 @@ export default req => {
       token = temp[1]
     }
   })
+  if (isClient) {
+    window.__JWT_TOKEN__ = token
+  }
   return token
 }

@@ -19,20 +19,14 @@ export const mutations = {
 }
 
 export const actions = {
-  async initAuth({ state, commit }) {
-    if (state.login) {
-      return
+  async nuxtServerInit({ commit }, { req }) {
+    const arr = [getPageData()]
+    const session = parseCookie(req)
+    if (session) {
+      arr.push(getLoginUser({ session }))
     }
-    const session = parseCookie()
-    if (!session) {
-      commit('SET_USER', {})
-      return
-    }
-    const user = await getLoginUser({ session })
-    commit('SET_USER', user || {})
-  },
-  async nuxtServerInit({ commit }) {
-    const data = await getPageData()
-    commit('SET_PAGE_DATA', data)
+    const data = await Promise.all(arr)
+    commit('SET_PAGE_DATA', data[0])
+    commit('SET_USER', session ? data[1] : {})
   }
 }

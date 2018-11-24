@@ -37,12 +37,6 @@ export default {
     SideTools,
     vMusic,
     vSign
-  },
-  created() {
-    if (this.$isServer) {
-      return
-    }
-    this.$store.dispatch('initAuth')
   }
 }
 </script>

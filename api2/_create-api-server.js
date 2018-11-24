@@ -29,11 +29,28 @@ export default new class {
       })
       return res.data.data
     } catch (e) {
-      const code = e.response ? e.response.status || 500 : 500
+      e.code = e.response ? e.response.status || 500 : 500
+      e.message = e.response.data.message
+      throw e
+    }
+  }
+
+  async post(url, data) {
+    try {
+      const res = await this.instance({
+        method: 'POST',
+        url,
+        data,
+        headers: makeAuthHeader(data)
+      })
+      return res.data.data
+    } catch (e) {
+      const code = e.response ? e.response.status : 500
       if (code === 401) {
-        return null
+        return {}
       }
       e.code = code
+      e.message = e.response.data.message
       throw e
     }
   }
