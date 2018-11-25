@@ -12,7 +12,7 @@
 
 <template>
   <div :class="$style.layoutDefault">
-    <router-view :class="$style.mainView"/>
+    <nuxt :class="$style.mainView"/>
     <v-footer/>
     <v-music/>
     <no-ssr>

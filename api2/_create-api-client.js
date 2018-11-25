@@ -38,32 +38,20 @@ export default new class {
       err => {
         if (err.message === `timeout of ${timeout}ms exceeded`) {
           return Promise.reject({
-            code: 0,
+            statusCode: 0,
             message: '网路请求超时，请稍候再试！'
           })
         }
-        try {
-          if (!err.response) {
-            return Promise.reject({
-              code: 1,
-              message: '网络错误，请刷新网页重试！'
-            })
-          }
-          const message = err.response.data.message
-          const code = err.response.status
-          if (typeof message === 'string') {
-            return Promise.reject({
-              code,
-              message
-            })
-          }
+        if (!err.response) {
           return Promise.reject({
-            code,
-            message: message[Object.keys(message)[0]][0]
+            statusCode: 1,
+            message: '网络错误，请刷新网页重试！'
           })
-        } catch (e) {
-          console.error(e)
         }
+        return Promise.reject({
+          statusCode: err.response.status,
+          message: err.response.data.message
+        })
       }
     )
 

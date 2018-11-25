@@ -30,7 +30,7 @@ export default new class {
         })
         resolve(res.data.data)
       } catch (e) {
-        e.code = e.response.status || 500
+        e.statusCode = e.response.status || 500
         e.message = e.response.data.message
         reject(e)
       }
@@ -52,7 +52,7 @@ export default new class {
         if (code === 401) {
           resolve({})
         }
-        e.code = code
+        e.statusCode = code
         e.message = e.response.data.message
         reject(e)
       }
