@@ -5,6 +5,7 @@ const path = require('path')
 const resolve = file => path.resolve(__dirname, file)
 const CompressionPlugin = require('compression-webpack-plugin')
 const BrotliPlugin = require('brotli-webpack-plugin')
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 
 module.exports = {
   mode: 'universal',
@@ -118,7 +119,7 @@ module.exports = {
     },
     extractCSS: true,
     plugins: (() => {
-      const result = []
+      const result = [new LodashModuleReplacementPlugin()]
       return isDev
         ? result.concat([])
         : result.concat([
@@ -136,6 +137,9 @@ module.exports = {
         camelCase: true
       }
     },
-    publicPath: isDev ? '/_nuxt/' : `${qiniu.host.static}${qiniu.key_prefix}`
+    publicPath: isDev ? '/_nuxt/' : `${qiniu.host.static}${qiniu.key_prefix}`,
+    babel: {
+      plugins: ['babel-plugin-lodash']
+    }
   }
 }
