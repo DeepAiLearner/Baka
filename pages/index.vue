@@ -57,6 +57,7 @@
         <nuxt-link to="/user/bing-yu/setting">设置</nuxt-link>
         <p>偶像：</p>
         <nuxt-link to="/role/trending"><span class="ok">排行榜</span></nuxt-link>
+        <nuxt-link to="/test">测试404</nuxt-link>
         <nuxt-link to="/role/1">详情页</nuxt-link>
         <p>帖子：</p>
         <nuxt-link to="/post/1">详情页</nuxt-link>

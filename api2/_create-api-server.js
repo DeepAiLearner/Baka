@@ -19,39 +19,43 @@ export default new class {
     })
   }
 
-  async get(url, data) {
-    try {
-      const res = await this.instance({
-        method: 'GET',
-        url,
-        params: data,
-        headers: makeAuthHeader(data)
-      })
-      return res.data.data
-    } catch (e) {
-      e.code = e.response.status || 500
-      e.message = e.response.data.message
-      throw e
-    }
+  get(url, data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await this.instance({
+          method: 'GET',
+          url,
+          params: data,
+          headers: makeAuthHeader(data)
+        })
+        resolve(res.data.data)
+      } catch (e) {
+        e.code = e.response.status || 500
+        e.message = e.response.data.message
+        reject(e)
+      }
+    })
   }
 
-  async post(url, data) {
-    try {
-      const res = await this.instance({
-        method: 'POST',
-        url,
-        data,
-        headers: makeAuthHeader(data)
-      })
-      return res.data.data
-    } catch (e) {
-      const code = e.response.status || 500
-      if (code === 401) {
-        return {}
+  post(url, data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await this.instance({
+          method: 'POST',
+          url,
+          data,
+          headers: makeAuthHeader(data)
+        })
+        resolve(res.data.data)
+      } catch (e) {
+        const code = e.response.status || 500
+        if (code === 401) {
+          resolve({})
+        }
+        e.code = code
+        e.message = e.response.data.message
+        reject(e)
       }
-      e.code = code
-      e.message = e.response.data.message
-      throw e
-    }
+    })
   }
 }()
