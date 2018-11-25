@@ -1,24 +1,27 @@
-<style lang="scss">
-</style>
-
 <template>
-  <div>
-    user pins
-  </div>
+  <image-flow-list :user-zone="zone"/>
 </template>
 
 <script>
+import ImageFlowList from '~/components/flow/list/ImageFlowList'
+
 export default {
-  name: '',
-  components: {},
-  props: {},
-  data() {
-    return {}
+  name: 'UserImage',
+  async asyncData(ctx) {
+    await ctx.store.dispatch('flow/initData', {
+      type: 'image',
+      sort: 'news',
+      userZone: ctx.route.params.zone,
+      ctx
+    })
   },
-  computed: {},
-  watch: {},
-  created() {},
-  mounted() {},
-  methods: {}
+  components: {
+    ImageFlowList
+  },
+  computed: {
+    zone() {
+      return this.$route.params.zone
+    }
+  }
 }
 </script>

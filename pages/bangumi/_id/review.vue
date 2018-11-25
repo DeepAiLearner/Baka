@@ -153,11 +153,11 @@ import { getBangumiScore } from '~/api2/bangumiApi'
 
 export default {
   name: 'BangumiScore',
-  async asyncData({ store, ctx, params }) {
-    const { id } = params
+  async asyncData(ctx) {
+    const { id } = ctx.params
     const data = await Promise.all([
       getBangumiScore({ id }),
-      store.dispatch('flow/initData', {
+      ctx.store.dispatch('flow/initData', {
         type: 'score',
         sort: 'active',
         bangumiId: id,
