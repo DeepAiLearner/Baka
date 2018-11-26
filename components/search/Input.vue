@@ -161,7 +161,7 @@ export default {
       this.$emit('input', val)
     })
     this.$watch('$route', val => {
-      if (val.name === 'search-index') {
+      if (val.name === 'search') {
         this.word = val.query.q
         this.selectedType = val.query.type
         setTimeout(() => {
@@ -184,7 +184,7 @@ export default {
         type: this.selectedType
       })
       this.$router.push({
-        name: 'search-index',
+        name: 'search',
         query: { q, type: this.selectedType }
       })
     },

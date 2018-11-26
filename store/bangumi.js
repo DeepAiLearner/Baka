@@ -1,5 +1,6 @@
 import Api from '~/api/bangumiApi'
 import ScoreApi from '~/api/scoreApi'
+import { getAllBangumi } from '~/api2/bangumiApi'
 
 export const state = () => ({
   follows: null,
@@ -30,10 +31,15 @@ export const state = () => ({
   topPosts: [],
   topFetchedId: 0,
   score: null,
-  scoreFetchId: 0
+  scoreFetchId: 0,
+  hots: [],
+  all: []
 })
 
 export const mutations = {
+  SET_ALL_BANGUMI(state, data) {
+    state.all = data
+  },
   FETCH_SOCIAL_USERS(state, { type, result }) {
     const prefix = state.info[`${type}_users`]
     state.info[`${type}_users`].list = prefix.list.concat(result.list)
@@ -114,6 +120,26 @@ export const mutations = {
 }
 
 export const actions = {
+  async getAllBangumi({ state, commit }) {
+    let needLoad = true
+    try {
+      const lastLoadAt = sessionStorage.getItem('all-bangumi-load-at')
+      if (lastLoadAt && Date.now() - lastLoadAt < 3600000) {
+        const list = JSON.parse(sessionStorage.getItem('all-bangumi-list'))
+        list && commit('SET_ALL_BANGUMI', list)
+        needLoad = !(list && list.length)
+      }
+    } catch (e) {}
+    if (state.all.length || !needLoad) {
+      return
+    }
+    const data = await getAllBangumi()
+    commit('SET_ALL_BANGUMI', data)
+    try {
+      sessionStorage.setItem('all-bangumi-load-at', Date.now())
+      sessionStorage.setItem('all-bangumi-list', JSON.stringify(data))
+    } catch (e) {}
+  },
   async getTags({ state, commit }, { id, ctx }) {
     if (state.tags.length) {
       return

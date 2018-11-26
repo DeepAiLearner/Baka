@@ -23,3 +23,7 @@ export const getBangumiVideos = ({ id }) => {
 export const getBangumiScore = ({ id }) => {
   return http.get('score/bangumis', { id })
 }
+
+export const getAllBangumi = () => {
+  return http.get('search/bangumis')
+}

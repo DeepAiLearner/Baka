@@ -37,6 +37,9 @@ export default {
     SideTools,
     vMusic,
     vSign
+  },
+  mounted() {
+    this.$store.dispatch('bangumi/getAllBangumi')
   }
 }
 </script>

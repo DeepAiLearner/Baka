@@ -34,6 +34,7 @@
 <script>
 export default {
   name: 'nuxt-error', // eslint-disable-line
+  layout: 'empty',
   props: {
     error: {
       type: Object,
