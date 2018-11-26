@@ -1,4 +1,5 @@
 import axios from 'axios'
+import generateRequestError from './_generateRequestError'
 
 const makeAuthHeader = params => {
   let headers = {}
@@ -30,9 +31,7 @@ export default new class {
         })
         resolve(res.data.data)
       } catch (e) {
-        e.statusCode = e.response.status || 500
-        e.message = e.response.data.message
-        reject(e)
+        reject(generateRequestError(e))
       }
     })
   }
@@ -48,13 +47,10 @@ export default new class {
         })
         resolve(res.data.data)
       } catch (e) {
-        const code = e.response.status || 500
-        if (code === 401) {
+        if ((e.response.status || 500) === 401) {
           resolve({})
         }
-        e.statusCode = code
-        e.message = e.response.data.message
-        reject(e)
+        reject(generateRequestError(e))
       }
     })
   }

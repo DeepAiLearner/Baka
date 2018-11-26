@@ -1,5 +1,6 @@
 import axios from 'axios'
 import parseCookie from '~/assets/js/parseCookie'
+import generateRequestError from './_generateRequestError'
 
 const timeout = 15000
 const pendingQueue = {}
@@ -35,24 +36,7 @@ export default new class {
 
     http.interceptors.response.use(
       res => res.data.data,
-      err => {
-        if (err.message === `timeout of ${timeout}ms exceeded`) {
-          return Promise.reject({
-            statusCode: 0,
-            message: '网路请求超时，请稍候再试！'
-          })
-        }
-        if (!err.response) {
-          return Promise.reject({
-            statusCode: 1,
-            message: '网络错误，请刷新网页重试！'
-          })
-        }
-        return Promise.reject({
-          statusCode: err.response.status,
-          message: err.response.data.message
-        })
-      }
+      err => generateRequestError(err, timeout)
     )
 
     this.instance = http
