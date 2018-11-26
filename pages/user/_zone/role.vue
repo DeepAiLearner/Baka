@@ -1,21 +1,17 @@
 <template>
-  <cartoon-role-flow-list
-    v-if="info"
-    :bangumi-id="info.id"
-    :bangumi-name="info.name"
-  />
+  <cartoon-role-flow-list :user-zone="zone"/>
 </template>
 
 <script>
 import CartoonRoleFlowList from '~/components/flow/list/CartoonRoleFlowList'
 
 export default {
-  name: 'BangumiCartoonRole',
-  async asyncData(ctx) {
-    await ctx.store.dispatch('flow/initData', {
+  name: 'UserCartoonRole',
+  async asyncData({ store, route, ctx }) {
+    await store.dispatch('flow/initData', {
       type: 'role',
-      sort: 'hot',
-      bangumiId: ctx.route.params.id,
+      sort: 'news',
+      userZone: route.params.zone,
       ctx
     })
   },
@@ -23,8 +19,8 @@ export default {
     CartoonRoleFlowList
   },
   computed: {
-    info() {
-      return this.$store.state.bangumi.info
+    zone() {
+      return this.$route.params.zone
     }
   }
 }
