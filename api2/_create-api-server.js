@@ -47,7 +47,9 @@ export default new class {
         })
         resolve(res.data.data)
       } catch (e) {
-        if ((e.response.status || 500) === 401) {
+        const resp = e.response || {}
+        const code = resp.status || 0
+        if (code === 401) {
           resolve({})
         }
         reject(generateRequestError(e))
