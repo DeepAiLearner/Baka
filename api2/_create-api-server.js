@@ -14,7 +14,7 @@ export default new class {
     this.instance = axios.create({
       baseURL: process.env.baseUrl,
       headers: {
-        Accept: 'application/x.api.latest+json'
+        accept: 'application/x.api.latest+json'
       },
       timeout: 10000
     })
