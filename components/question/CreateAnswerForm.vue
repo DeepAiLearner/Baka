@@ -197,6 +197,7 @@ export default {
       this.$channel.$emit('write-submit', true)
       const api = new Api(this)
       try {
+        let result = null
         const form = {
           question_id: this.questionId,
           content: richContent.content,
@@ -209,17 +210,13 @@ export default {
           form.id = this.id
           await api.updateAnswer(form)
         } else {
-          const result = await api.createAnswer(form)
+          result = await api.createAnswer(form)
           this.id = result.data
         }
         if (richContent.publish) {
-          this.$toast
-            .success(
-              typeof result !== 'undefined' ? result.message : '发布成功'
-            )
-            .then(() => {
-              window.location.href = this.$alias.answer(this.id)
-            })
+          this.$toast.success(result ? result.message : '发布成功').then(() => {
+            window.location.href = this.$alias.answer(this.id)
+          })
         } else {
           this.$toast.success('编辑成功！')
           this.$store.commit('question/EDIT_ANSWER', { id: this.id })

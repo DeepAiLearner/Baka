@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Alias from '~/assets/js/alias'
 import Utils from '~/assets/js/utils'
-
+import env from 'env'
 Vue.use({
   install(Vue) {
+    Vue.prototype.$cdn = env.cdn
+
     Vue.prototype.$utils = Utils
 
     Vue.prototype.$alias = Alias

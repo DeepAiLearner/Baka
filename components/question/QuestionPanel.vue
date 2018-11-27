@@ -408,7 +408,7 @@ export default {
         return
       }
       this.loadingFollowers = true
-      const api = new Api(this)
+      const api = new QuestionApi(this)
       const type = 'follow'
       try {
         const result = await api.users({

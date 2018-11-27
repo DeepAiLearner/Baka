@@ -11,6 +11,7 @@ import Affix from '~/components/common/Affix'
 import Share from '~/components/common/Share'
 import AvaDialog from '~/components/common/AvaDialog'
 import LoadMoreBtn from '~/components/common/LoadMoreBtn'
+import ReportDialog from '~/components/common/ReportDialog'
 import UserCard from '~/components/user/UserCard'
 import NoContent from '~/components/NoContent'
 
@@ -26,5 +27,7 @@ Vue.component(Affix.name, Affix)
 Vue.component(Share.name, Share)
 Vue.component(AvaDialog.name, AvaDialog)
 Vue.component(LoadMoreBtn.name, LoadMoreBtn)
+Vue.component(ReportDialog.name, ReportDialog)
+
 Vue.component(UserCard.name, UserCard)
 Vue.component(NoContent.name, NoContent)

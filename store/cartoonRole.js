@@ -68,11 +68,14 @@ export default {
     }
   },
   actions: {
-    async getFansList({ state, commit }, { bangumiId, roleId, sort, reset }) {
+    async getFansList(
+      { state, commit },
+      { ctx, bangumiId, roleId, sort, reset }
+    ) {
       if (state.fans[sort].noMore && !reset) {
         return
       }
-      const api = new Api()
+      const api = new Api(ctx)
       const length = state.fans[sort].data.length
       const data = await api.fans(
         Object.assign(
