@@ -108,7 +108,6 @@
   >
     <v-layout>
       <div
-        slot="main"
         class="qaq-question"
       >
         <ul class="qaq-tags">

@@ -16,6 +16,10 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "chimee": "^0.11.0",
+    "chimee-kernel-flv": "^1.4.10",
+    "chimee-plugin-center-state": "^0.0.12",
+    "chimee-plugin-controlbar": "^0.5.0",
     "cross-env": "^5.2.0",
     "echarts": "^4.2.0-rc.2",
     "element-ui": "^2.4.8",

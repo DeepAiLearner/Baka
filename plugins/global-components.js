@@ -14,6 +14,9 @@ import LoadMoreBtn from '~/components/common/LoadMoreBtn'
 import ReportDialog from '~/components/common/ReportDialog'
 import UserCard from '~/components/user/UserCard'
 import NoContent from '~/components/NoContent'
+import BangumiPanel from '~/components/bangumi/BangumiPanel.vue'
+import TitleParser from '~/components/jsonEditor/parser/TitleParser.vue'
+import TitlePreview from '~/components/jsonEditor/preview/TitlePreview.vue'
 
 Vue.use(VueClipboards)
 Vue.use(ImageLazyLoad, {})
@@ -31,3 +34,6 @@ Vue.component(ReportDialog.name, ReportDialog)
 
 Vue.component(UserCard.name, UserCard)
 Vue.component(NoContent.name, NoContent)
+Vue.component(BangumiPanel.name, BangumiPanel)
+Vue.component(TitleParser.name, TitleParser)
+Vue.component(TitlePreview.name, TitlePreview)
