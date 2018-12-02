@@ -8,6 +8,7 @@
 
 <template>
   <div id="post-flow">
+    <!--
     <div class="flow-intro">
       <div class="img">帖</div>
       <div class="intro">
@@ -71,6 +72,7 @@
         </el-alert>
       </div>
     </div>
+    -->
     <flow-list
       func="getWorldPost"
       type="seenIds"
@@ -98,8 +100,8 @@ export default {
         func: 'getWorldPost',
         type: 'seenIds',
         sort: 'active'
-      }),
-      store.dispatch('flow/getMeta', { type: 'post' })
+      })
+      // store.dispatch('flow/getMeta', { type: 'post' })
     ])
   },
   components: {

@@ -38,7 +38,7 @@ export const actions = {
       changing = 'id',
       count = 12,
       sort,
-      refresh = true,
+      refresh = false,
       force = false
     }
   ) {

@@ -8,6 +8,7 @@
 
 <template>
   <div id="post-flow">
+    <!--
     <div class="flow-intro">
       <div class="img">知</div>
       <div class="intro">
@@ -52,27 +53,40 @@
         </el-alert>
       </div>
     </div>
-    <question-flow-list/>
+    -->
+    <flow-list
+      func="getWorldQAQ"
+      type="seenIds"
+      sort="active"
+    >
+      <ul slot-scope="{ flow }">
+        <question-flow-item
+          v-for="item in flow"
+          :key="item.id"
+          :item="item"
+        />
+      </ul>
+    </flow-list>
   </div>
 </template>
 
 <script>
-import QuestionFlowList from '~/components/flow/list/QuestionFlowList'
+import QuestionFlowItem from '~/components/flow/item/QuestionFlowItem'
 
 export default {
   name: 'QuestionWorld',
-  async asyncData({ store, session }) {
+  async asyncData({ store }) {
     await Promise.all([
-      store.dispatch('flow/getData', {
-        type: 'question',
-        sort: 'active',
-        session
-      }),
-      store.dispatch('flow/getMeta', { type: 'question' })
+      store.dispatch('flow2/initData', {
+        func: 'getWorldQAQ',
+        type: 'seenIds',
+        sort: 'active'
+      })
+      // store.dispatch('flow/getMeta', { type: 'question' })
     ])
   },
   components: {
-    QuestionFlowList
+    QuestionFlowItem
   },
   data() {
     return {

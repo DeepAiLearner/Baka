@@ -8,6 +8,7 @@
 
 <template>
   <div id="score-flow">
+    <!--
     <div class="flow-intro">
       <div class="img">评</div>
       <div class="intro">
@@ -68,27 +69,40 @@
         </el-alert>
       </div>
     </div>
-    <score-flow-list/>
+    -->
+    <flow-list
+      func="getWorldScore"
+      type="seenIds"
+      sort="active"
+    >
+      <ul slot-scope="{ flow }">
+        <score-flow-item
+          v-for="item in flow"
+          :key="item.id"
+          :item="item"
+        />
+      </ul>
+    </flow-list>
   </div>
 </template>
 
 <script>
-import ScoreFlowList from '~/components/flow/list/ScoreFlowList'
+import ScoreFlowItem from '~/components/flow/item/ScoreFlowItem'
 
 export default {
   name: 'ScoreWorld',
-  async asyncData({ store, session }) {
+  async asyncData({ store }) {
     await Promise.all([
-      store.dispatch('flow/getData', {
-        type: 'score',
-        sort: 'active',
-        session
-      }),
-      store.dispatch('flow/getMeta', { type: 'score' })
+      store.dispatch('flow2/initData', {
+        func: 'getWorldScore',
+        type: 'seenIds',
+        sort: 'active'
+      })
+      // store.dispatch('flow/getMeta', { type: 'score' })
     ])
   },
   components: {
-    ScoreFlowList
+    ScoreFlowItem
   },
   data() {
     return {

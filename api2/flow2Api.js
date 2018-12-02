@@ -61,7 +61,7 @@ export const getWorldScore = ({ ctx, seen_ids, count, max_id, order_by }) => {
 
 export const getWorldQAQ = ({ ctx, seen_ids, count, max_id, order_by }) => {
   return getFlowList(ctx, {
-    type: 'qaq',
+    type: 'question',
     sort: order_by,
     seenIds: seen_ids,
     minId: max_id,
@@ -134,7 +134,7 @@ export const getBangumiQAQ = ({
   order_by
 }) => {
   return getFlowList(ctx, {
-    type: 'qaq',
+    type: 'question',
     bangumiId: id,
     sort: order_by,
     seenIds: seen_ids,
@@ -177,7 +177,7 @@ export const getUserScore = ({ ctx, id, page, count, order_by }) => {
 
 export const getUserQAQ = ({ ctx, id, page, count, order_by }) => {
   return getFlowList(ctx, {
-    type: 'qaq',
+    type: 'question',
     userZone: id,
     sort: order_by,
     take: count,

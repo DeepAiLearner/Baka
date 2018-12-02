@@ -8,6 +8,7 @@
 
 <template>
   <div id="image-flow">
+    <!--
     <div class="flow-intro">
       <div class="img">图</div>
       <div class="intro">
@@ -72,27 +73,37 @@
         </el-alert>
       </div>
     </div>
-    <image-flow-list/>
+    -->
+    <flow-list
+      func="getWorldImage"
+      type="seenIds"
+      sort="active"
+    >
+      <image-waterfall-flow
+        slot-scope="{ flow }"
+        :list="flow"
+      />
+    </flow-list>
   </div>
 </template>
 
 <script>
-import ImageFlowList from '~/components/flow/list/ImageFlowList'
+import ImageWaterfallFlow from '~/components/image/ImageWaterfallFlow'
 
 export default {
   name: 'ImageWorld',
-  async asyncData({ store, session }) {
+  async asyncData({ store }) {
     await Promise.all([
-      store.dispatch('flow/getData', {
-        type: 'image',
-        sort: 'active',
-        session
-      }),
-      store.dispatch('flow/getMeta', { type: 'image' })
+      store.dispatch('flow2/initData', {
+        func: 'getWorldImage',
+        type: 'seenIds',
+        sort: 'active'
+      })
+      // store.dispatch('flow/getMeta', { type: 'image' })
     ])
   },
   components: {
-    ImageFlowList
+    ImageWaterfallFlow
   },
   data() {
     return {

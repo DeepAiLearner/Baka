@@ -157,11 +157,6 @@
       }
     }
   }
-
-  .load-more-btn {
-    margin-top: 20px;
-    width: 100%;
-  }
 }
 </style>
 
@@ -307,12 +302,6 @@
         </waterfall-slot>
       </waterfall>
     </no-ssr>
-    <load-more-btn
-      :no-more="noMore"
-      :loading="loading"
-      :auto="true"
-      @fetch="loadMore"
-    />
   </div>
 </template>
 
@@ -339,14 +328,6 @@ export default {
       type: Array,
       default: () => []
     },
-    noMore: {
-      type: Boolean,
-      default: false
-    },
-    loading: {
-      type: Boolean,
-      default: false
-    },
     bangumiId: {
       type: Number,
       default: 0
@@ -370,9 +351,6 @@ export default {
         return 300
       }
       return result
-    },
-    loadMore() {
-      this.$emit('load')
     }
   }
 }
