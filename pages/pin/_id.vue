@@ -361,6 +361,9 @@ import { getImageInfo } from '~/api2/imageApi'
 
 export default {
   name: 'ImageShow',
+  validate({ params }) {
+    return /^\d+$/.test(params.id)
+  },
   async asyncData({ app, params, error }) {
     return getImageInfo(app, {
       id: params.id
@@ -405,6 +408,12 @@ export default {
       ]
     }
   },
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       info: null,
@@ -419,9 +428,6 @@ export default {
     }
   },
   computed: {
-    id() {
-      return +this.$route.params.id
-    },
     cartoon() {
       return []
     },

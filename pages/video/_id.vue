@@ -101,9 +101,9 @@
         :poster="$resize(video.poster, { width: 800 })"
         :next="nextPartVideo"
         :is-guest="isGuest"
-        :blocked="videoPackage.blocked"
-        :must-reward="videoPackage.mustReward && !video.rewarded"
-        :need-min-level="videoPackage.needMinLevel"
+        :blocked="info.ip_blocked"
+        :must-reward="info.must_reward && !video.rewarded"
+        :need-min-level="info.need_min_level"
         @playing="handlePlaying"
       />
       <!-- 视频底部 -->
@@ -153,14 +153,17 @@
 </template>
 
 <script>
-import VideoApi from '~/api/videoApi'
 import vVideo from '~/components/Video'
 import vPart from '~/components/lists/Parts'
 import CommentMain from '~/components/comments/CommentMain'
 import SocialPanel from '~/components/common/SocialPanel'
+import { getVideoInfo, markPlaying } from '~/api2/videoApi'
 
 export default {
   name: 'VideoShow',
+  validate({ params }) {
+    return /^\d+$/.test(params.id)
+  },
   head() {
     let resultPart = this.video.part
     let season = ''
@@ -212,39 +215,48 @@ export default {
     CommentMain,
     SocialPanel
   },
-  async asyncData(ctx) {
-    const id = ctx.route.params.id
-    await Promise.all([
-      ctx.store.dispatch('video/getShow', { id, ctx }),
-      ctx.store.dispatch('comment/getMainComments', {
-        ctx,
-        id,
-        type: 'video',
-        seeReplyId: ctx.route.query['comment-id']
+  async asyncData({ app, params, error }) {
+    return getVideoInfo(app, {
+      id: params.id
+    })
+      .then(data => {
+        return {
+          info: data,
+          video: data.info,
+          list: data.list.videos,
+          bangumi: data.bangumi,
+          season: data.season
+        }
       })
-    ])
+      .catch(e => error(e))
+  },
+  async fetch({ store, params, query }) {
+    await store.dispatch('comment/getMainComments', {
+      id: params.id,
+      type: 'video',
+      seeReplyId: query['comment-id']
+    })
+  },
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
   },
   data() {
     return {
       showAll: false,
-      firstPlay: true
+      firstPlay: true,
+      info: null,
+      video: null,
+      bangumi: null,
+      season: null,
+      list: []
     }
   },
   computed: {
-    id() {
-      return parseInt(this.$route.params.id, 10)
-    },
     isGuest() {
       return !this.$store.state.login
-    },
-    videoPackage() {
-      return this.$store.state.video
-    },
-    video() {
-      return this.videoPackage.info
-    },
-    list() {
-      return this.videoPackage.list.videos
     },
     videos() {
       if (!this.season) {
@@ -255,12 +267,6 @@ export default {
         result = result.concat(videos.data)
       })
       return result
-    },
-    bangumi() {
-      return this.videoPackage.bangumi
-    },
-    season() {
-      return this.$store.state.video.season
     },
     nextPartVideo() {
       let nextId = 0
@@ -282,8 +288,7 @@ export default {
     handlePlaying() {
       if (this.firstPlay) {
         this.firstPlay = false
-        const api = new VideoApi(this)
-        api.playing(this.id)
+        markPlaying(this, { id: this.id })
       }
     },
     handleVideoReportClick() {
@@ -299,7 +304,7 @@ export default {
       this.$store.commit('video/FOLLOW_ALBUM_BANGUMI', { result })
     },
     handleRewardAction() {
-      if (this.videoPackage.mustReward) {
+      if (this.info.must_reward) {
         window.location.reload()
       }
     }

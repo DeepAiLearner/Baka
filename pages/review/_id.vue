@@ -268,6 +268,12 @@ export default {
       ]
     }
   },
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       info: null,

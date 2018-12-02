@@ -65,6 +65,9 @@ import QuestionPanel from '~/components/question/QuestionPanel'
 
 export default {
   name: 'QuestionShow',
+  validate({ params }) {
+    return /^\d+$/.test(params.id)
+  },
   async asyncData(ctx) {
     const id = ctx.route.params.id
     await Promise.all([
@@ -99,10 +102,13 @@ export default {
     AnswerFlowList,
     QuestionPanel
   },
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   computed: {
-    id() {
-      return +this.$route.params.id
-    },
     qaq() {
       return this.$store.state.question.qaq
     }

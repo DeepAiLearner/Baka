@@ -74,6 +74,9 @@ import AnswerFlowItem from '~/components/flow/item/AnswerFlowItem'
 
 export default {
   name: 'AnswerShow',
+  validate({ params }) {
+    return /^\d+$/.test(params.id)
+  },
   async asyncData(ctx) {
     await ctx.store.dispatch('question/getAnswer', {
       ctx,
@@ -105,10 +108,13 @@ export default {
       ]
     }
   },
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   computed: {
-    id() {
-      return +this.$route.params.id
-    },
     qaq() {
       return this.$store.state.question.qaq
     },
