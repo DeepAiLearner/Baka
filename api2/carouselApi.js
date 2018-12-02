@@ -2,6 +2,10 @@ export const getPageData = ctx => {
   return ctx.$axios.get('door/data', { refer: 'pc' })
 }
 
+export const getBanners = ctx => {
+  return ctx.$axios.get('image/banner')
+}
+
 export const getCarousel = ctx => {
   return ctx.$axios.get('cm/loop/list')
 }
