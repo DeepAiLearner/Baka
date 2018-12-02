@@ -133,7 +133,7 @@ export const actions = {
     if (state.all.length || !needLoad) {
       return
     }
-    const data = await getAllBangumi()
+    const data = await getAllBangumi(this)
     commit('SET_ALL_BANGUMI', data)
     try {
       sessionStorage.setItem('all-bangumi-load-at', Date.now())

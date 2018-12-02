@@ -1,9 +1,7 @@
-import http from 'create-http'
-
-export const getRecommendedUsers = () => {
-  return http.get('user/recommended')
+export const getRecommendedUsers = ctx => {
+  return ctx.$axios.get('user/recommended')
 }
 
-export const getLoginUser = ({ session }) => {
-  return http.post('door/refresh', { session })
+export const getLoginUser = ctx => {
+  return ctx.$axios.post('door/refresh')
 }

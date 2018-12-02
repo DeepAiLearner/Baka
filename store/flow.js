@@ -64,20 +64,12 @@ export const mutations = {
 
 export const actions = {
   async getMeta({ commit }, { type }) {
-    const data = await getFlowMeta({ type })
+    const data = await getFlowMeta(this, { type })
     commit('SET_META', { data, type })
   },
   async initData(
     { state, commit },
-    {
-      session,
-      sort,
-      type,
-      take = 10,
-      bangumiId = 0,
-      userZone = '',
-      refresh = false
-    }
+    { sort, type, take = 10, bangumiId = 0, userZone = '', refresh = false }
   ) {
     if (
       +bangumiId !== state[type].bangumiId ||
@@ -98,7 +90,7 @@ export const actions = {
     const source = state[type][sort]
     const list = source.list
     if (sort === 'news') {
-      data = await getFlowList({
+      data = await getFlowList(this, {
         sort,
         type,
         take,
@@ -106,39 +98,25 @@ export const actions = {
         seenIds: '',
         minId: refresh ? 0 : list.length ? list[list.length - 1].id : 0,
         bangumiId,
-        userZone,
-        session
+        userZone
       })
     } else {
-      data = await getFlowList({
+      data = await getFlowList(this, {
         sort,
         type,
         take,
         page: source.page,
         minId: 0,
-        seenIds: refresh
-          ? ''
-          : list.length
-            ? list.map(_ => _.id).toString()
-            : '',
+        seenIds: '',
         bangumiId,
-        userZone,
-        session
+        userZone
       })
     }
     commit('PUSH_STATE', { data, type, sort, bangumiId, userZone, refresh })
   },
   async getData(
     { state, commit },
-    {
-      session,
-      sort,
-      type,
-      take = 10,
-      bangumiId = 0,
-      userZone = '',
-      refresh = false
-    }
+    { sort, type, take = 10, bangumiId = 0, userZone = '', refresh = false }
   ) {
     if (
       +bangumiId !== state[type].bangumiId ||
@@ -154,7 +132,7 @@ export const actions = {
     const source = state[type][sort]
     const list = source.list
     if (sort === 'news') {
-      data = await getFlowList({
+      data = await getFlowList(this, {
         sort,
         type,
         take,
@@ -162,11 +140,10 @@ export const actions = {
         seenIds: '',
         minId: refresh ? 0 : list.length ? list[list.length - 1].id : 0,
         bangumiId,
-        userZone,
-        session
+        userZone
       })
     } else {
-      data = await getFlowList({
+      data = await getFlowList(this, {
         sort,
         type,
         take,
@@ -178,8 +155,7 @@ export const actions = {
             ? list.map(_ => _.id).toString()
             : '',
         bangumiId,
-        userZone,
-        session
+        userZone
       })
     }
     commit('PUSH_STATE', { data, type, sort, bangumiId, userZone, refresh })

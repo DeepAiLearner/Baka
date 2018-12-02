@@ -188,13 +188,11 @@ export default {
   components: {
     UserRecommended
   },
-  async asyncData() {
-    const data = await Promise.all([getRecommendedUsers(), getCarousel()])
-    if (data.every(_ => _)) {
-      return {
-        recommendedUsers: data[0],
-        loops: data[1]
-      }
+  async asyncData({ app }) {
+    const data = await Promise.all([getRecommendedUsers(app), getCarousel(app)])
+    return {
+      recommendedUsers: data[0],
+      loops: data[1]
     }
   },
   head: {

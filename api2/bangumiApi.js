@@ -1,29 +1,31 @@
-import http from 'create-http'
-
-export const getRecommendedBangumis = () => {
-  return http.get('bangumi/recommended')
+export const getRecommendedBangumis = ctx => {
+  return ctx.$axios.get('bangumi/recommended')
 }
 
-export const getReleasedBangumis = () => {
-  return http.get('bangumi/released')
+export const getReleasedBangumis = ctx => {
+  return ctx.$axios.get('bangumi/released')
 }
 
-export const getAllBangumiTag = () => {
-  return http.get('bangumi/tags')
+export const getAllBangumiTag = ctx => {
+  return ctx.$axios.get('bangumi/tags')
 }
 
-export const getCategoryBangumis = ({ tags, page, take }) => {
-  return http.get('bangumi/category', { id: tags, page, take })
+export const getCategoryBangumis = (ctx, { tags, page, take }) => {
+  return ctx.$axios.get('bangumi/category', {
+    params: { id: tags, page, take }
+  })
 }
 
-export const getBangumiVideos = ({ id }) => {
-  return http.get(`bangumi/${id}/videos`)
+export const getBangumiVideos = (ctx, { id }) => {
+  return ctx.$axios.get(`bangumi/${id}/videos`)
 }
 
-export const getBangumiScore = ({ id }) => {
-  return http.get('score/bangumis', { id })
+export const getBangumiScore = (ctx, { id }) => {
+  return ctx.$axios.get('score/bangumis', {
+    params: { id }
+  })
 }
 
-export const getAllBangumi = () => {
-  return http.get('search/bangumis')
+export const getAllBangumi = ctx => {
+  return ctx.$axios.get('search/bangumis')
 }

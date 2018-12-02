@@ -305,18 +305,16 @@ import {
 
 export default {
   name: 'TrendingRole',
-  async asyncData() {
+  async asyncData({ app }) {
     const data = await Promise.all([
-      getTodayActivity(),
-      newbieUsers(),
-      dalaoUsers()
+      getTodayActivity(app),
+      newbieUsers(app),
+      dalaoUsers(app)
     ])
-    if (data.every(_ => _)) {
-      return {
-        todayActivity: data[0],
-        newbieUsers: data[1],
-        dalaoUsers: data[2]
-      }
+    return {
+      todayActivity: data[0],
+      newbieUsers: data[1],
+      dalaoUsers: data[2]
     }
   },
   head: {

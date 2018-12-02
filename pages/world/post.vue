@@ -80,12 +80,11 @@ import PostFlowList from '~/components/flow/list/PostFlowList'
 
 export default {
   name: 'PostWorld',
-  async asyncData({ store, session }) {
+  async asyncData({ store }) {
     await Promise.all([
-      store.dispatch('flow/getData', {
+      store.dispatch('flow/initData', {
         type: 'post',
-        sort: 'active',
-        session
+        sort: 'active'
       }),
       store.dispatch('flow/getMeta', { type: 'post' })
     ])

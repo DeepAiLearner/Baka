@@ -70,10 +70,11 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/axios',
     '~/plugins/element-ui',
-    '~/plugins/prototype-global',
+    '~/plugins/global-prototype',
     '~/plugins/global-components',
-    { src: '~/plugins/prototype-client', ssr: false }
+    { src: '~/plugins/client-prototype', ssr: false }
   ],
 
   /*
@@ -81,6 +82,7 @@ module.exports = {
   */
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
+    '@nuxtjs/axios',
     '@nuxtjs/style-resources'
   ],
 
@@ -92,7 +94,21 @@ module.exports = {
    * Global middleware
    */
   router: {
-    middleware: ['session']
+    extendRoutes(routes) {
+      for (const route of routes) {
+        route.props = /:/.test(route.path)
+        if (route.children) {
+          for (const item of route.children) {
+            item.props = /:/.test(item.path)
+          }
+        }
+      }
+      routes.push({
+        name: 'error-fallback',
+        path: '*',
+        component: resolve('pages/error/404.vue')
+      })
+    }
   },
 
   /*
@@ -112,9 +128,6 @@ module.exports = {
       config.resolve.alias['create-api'] = isClient
         ? resolve('./api/_create-api-client.js')
         : resolve('./api/_create-api-server.js')
-      config.resolve.alias['create-http'] = isClient
-        ? resolve('./api2/_create-api-client.js')
-        : resolve('./api2/_create-api-server.js')
       config.resolve.alias.env = resolve('./.env.js')
     },
     extractCSS: true,

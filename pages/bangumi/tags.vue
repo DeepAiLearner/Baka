@@ -149,20 +149,18 @@ import {
 
 export default {
   name: 'BangumiTags',
-  async asyncData() {
+  async asyncData({ app }) {
     const data = await Promise.all([
-      getAllBangumiTag(),
-      getRecommendedBangumis()
+      getAllBangumiTag(app),
+      getRecommendedBangumis(app)
     ])
-    if (data.every(_ => _)) {
-      return {
-        recommendedBangumis: data[1],
-        tags: data[0].map(_ => {
-          return Object.assign(_, {
-            selected: false
-          })
+    return {
+      recommendedBangumis: data[1],
+      tags: data[0].map(_ => {
+        return Object.assign(_, {
+          selected: false
         })
-      }
+      })
     }
   },
   components: {

@@ -1,17 +1,15 @@
-import http from 'create-http'
-
-export const getPageData = () => {
-  return http.get('door/data', { refer: 'pc' })
+export const getPageData = ctx => {
+  return ctx.$axios.get('door/data', { refer: 'pc' })
 }
 
-export const getCarousel = () => {
-  return http.get('cm/loop/list')
+export const getCarousel = ctx => {
+  return ctx.$axios.get('cm/loop/list')
 }
 
-export const viewCarousel = ({ id }) => {
-  return http.get('cm/loop/view', { id })
+export const viewCarousel = (ctx, { id }) => {
+  return ctx.$axios.post('cm/loop/view', { id })
 }
 
-export const clickCarousel = ({ id }) => {
-  return http.get('cm/loop/click', { id })
+export const clickCarousel = (ctx, { id }) => {
+  return ctx.$axios.post('cm/loop/click', { id })
 }

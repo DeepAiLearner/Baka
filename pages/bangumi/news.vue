@@ -154,16 +154,14 @@ export default {
   head: {
     title: '新番放送 - 番剧'
   },
-  async asyncData() {
+  async asyncData({ app }) {
     const data = await Promise.all([
-      getReleasedBangumis(),
-      getRecommendedBangumis()
+      getReleasedBangumis(app),
+      getRecommendedBangumis(app)
     ])
-    if (data.every(_ => _)) {
-      return {
-        released: data[0],
-        recommendedBangumis: data[1]
-      }
+    return {
+      released: data[0],
+      recommendedBangumis: data[1]
     }
   },
   data() {

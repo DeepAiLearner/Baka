@@ -592,7 +592,7 @@
     js-levenshtein "^1.1.3"
     semver "^5.3.0"
 
-"@babel/runtime@^7.1.5":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.5":
   version "7.1.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.1.5.tgz#4170907641cf1f61508f563ece3725150cc6fe39"
   dependencies:
@@ -852,6 +852,15 @@
     webpack-node-externals "^1.7.2"
     webpackbar "^3.1.3"
 
+"@nuxtjs/axios@^5.3.6":
+  version "5.3.6"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/axios/-/axios-5.3.6.tgz#1bad5af6e30977809cddd5248dd3b41271d1dc14"
+  dependencies:
+    "@nuxtjs/proxy" "^1.3.0"
+    axios "^0.18.0"
+    axios-retry "^3.1.1"
+    consola "^1.4.4"
+
 "@nuxtjs/devalue@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@nuxtjs/devalue/-/devalue-1.1.0.tgz#4dcdf33d914f6ea71b09da365452dd1016390d64"
@@ -866,6 +875,13 @@
     consola "^1.4.3"
     esm "^3.0.79"
     node-fetch "^2.2.0"
+
+"@nuxtjs/proxy@^1.3.0":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/proxy/-/proxy-1.3.1.tgz#7d76179aff321491f126d6560434579a4dc7a89a"
+  dependencies:
+    consola "^1.4.4"
+    http-proxy-middleware "^0.19.0"
 
 "@nuxtjs/style-resources@^0.1.1":
   version "0.1.1"
@@ -1307,6 +1323,12 @@ aws4@^1.6.0, aws4@^1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.8.0.tgz#f0e003d9ca9e7f59c7a508945d7b2ef9a04a542f"
 
+axios-retry@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/axios-retry/-/axios-retry-3.1.1.tgz#88d2971f671a9023b21d887c5dcac6c54f332cde"
+  dependencies:
+    is-retry-allowed "^1.1.0"
+
 axios@^0.18.0:
   version "0.18.0"
   resolved "http://registry.npmjs.org/axios/-/axios-0.18.0.tgz#32d53e4851efdc0a11993b6cd000789d70c05102"
@@ -1362,7 +1384,7 @@ babel-plugin-transform-vue-jsx@^4.0.1:
   dependencies:
     esutils "^2.0.2"
 
-babel-runtime@6.x:
+babel-runtime@6.x, babel-runtime@^6.23.0, babel-runtime@^6.25.0, babel-runtime@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
   dependencies:
@@ -1813,6 +1835,97 @@ check-types@^7.3.0:
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/check-types/-/check-types-7.4.0.tgz#0378ec1b9616ec71f774931a3c6516fad8c152f4"
 
+chimee-helper-dom@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/chimee-helper-dom/-/chimee-helper-dom-0.1.8.tgz#8d3fac173ea1cd3da2b51575772e6b082a22831f"
+  dependencies:
+    babel-runtime "^6.26.0"
+    chimee-helper-events "^0.1.0"
+    chimee-helper-utils "^0.2.0"
+    toxic-predicate-functions "^0.1.5"
+
+chimee-helper-events@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/chimee-helper-events/-/chimee-helper-events-0.1.0.tgz#a8543e5897ee440665ae209b4b17a32b489e57b1"
+  dependencies:
+    babel-runtime "^6.23.0"
+    toxic-predicate-functions "^0.1.2"
+
+chimee-helper-log@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/chimee-helper-log/-/chimee-helper-log-0.1.3.tgz#247c96d2694389686139745a90a1619f6e043550"
+  dependencies:
+    babel-runtime "^6.23.0"
+    toxic-predicate-functions "^0.1.2"
+
+chimee-helper-utils@^0.2.0, chimee-helper-utils@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/chimee-helper-utils/-/chimee-helper-utils-0.2.1.tgz#aa8ae731da565e78c49d47a6a3a02cc8bec3e145"
+  dependencies:
+    babel-runtime "^6.23.0"
+    toxic-predicate-functions "^0.1.2"
+
+chimee-helper@^0.2.11, chimee-helper@^0.2.8:
+  version "0.2.11"
+  resolved "https://registry.yarnpkg.com/chimee-helper/-/chimee-helper-0.2.11.tgz#3d2f0b1c6139639d44b1813b1b73a2a04da83923"
+  dependencies:
+    babel-runtime "^6.26.0"
+    chimee-helper-dom "^0.1.8"
+    chimee-helper-events "^0.1.0"
+    chimee-helper-log "^0.1.3"
+    chimee-helper-utils "^0.2.1"
+    toxic-predicate-functions "^0.1.5"
+    toxic-utils "^0.2.0"
+    ua-parser-js "^0.7.17"
+
+"chimee-helper@git+https://github.com/Chimeejs/chimee-helper.git":
+  version "0.2.11"
+  resolved "git+https://github.com/Chimeejs/chimee-helper.git#193fda2e3f8d207c15e715df94dbba953347f24e"
+  dependencies:
+    babel-runtime "^6.26.0"
+    chimee-helper-dom "^0.1.8"
+    chimee-helper-events "^0.1.0"
+    chimee-helper-log "^0.1.3"
+    chimee-helper-utils "^0.2.1"
+    toxic-predicate-functions "^0.2.3"
+    toxic-utils "^0.3.0"
+    ua-parser-js "^0.7.18"
+
+chimee-kernel-flv@^1.4.10:
+  version "1.4.10"
+  resolved "https://registry.yarnpkg.com/chimee-kernel-flv/-/chimee-kernel-flv-1.4.10.tgz#bb77a73d90350a036ec163830a99ebaf5dc3b8ec"
+  dependencies:
+    babel-runtime "^6.23.0"
+
+chimee-plugin-center-state@^0.0.12:
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/chimee-plugin-center-state/-/chimee-plugin-center-state-0.0.12.tgz#dd600bbccd34f63537af12cd8a77d43553577b86"
+  dependencies:
+    chimee-helper "git+https://github.com/Chimeejs/chimee-helper.git"
+    chimee-plugin-popup "0.0.7"
+
+chimee-plugin-controlbar@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/chimee-plugin-controlbar/-/chimee-plugin-controlbar-0.5.0.tgz#a814bf93935ce684429f829d482668db78837a85"
+  dependencies:
+    chimee-helper "git+https://github.com/Chimeejs/chimee-helper.git"
+
+chimee-plugin-popup@0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/chimee-plugin-popup/-/chimee-plugin-popup-0.0.7.tgz#791caf330fbe6f82eff61962112c4e2ad8952549"
+  dependencies:
+    babel-runtime "^6.26.0"
+    chimee-helper "^0.2.8"
+
+chimee@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/chimee/-/chimee-0.11.0.tgz#38138a586f37e4e7b612a6c0bc8409e0591504bf"
+  dependencies:
+    babel-runtime "^6.26.0"
+    chimee-helper "^0.2.11"
+    es-fullscreen "^0.3.0"
+    toxic-decorators "^0.3.8"
+
 chokidar@^2.0.2, chokidar@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.0.4.tgz#356ff4e2b0e8e43e322d18a372460bbcf3accd26"
@@ -2054,7 +2167,7 @@ connect@^3.6.6:
     parseurl "~1.3.2"
     utils-merge "1.0.1"
 
-consola@^1.4.3:
+consola@^1.4.3, consola@^1.4.4:
   version "1.4.5"
   resolved "https://registry.yarnpkg.com/consola/-/consola-1.4.5.tgz#09732d07cb50af07332e54e0f42fafb92b962c4a"
   dependencies:
@@ -2800,6 +2913,14 @@ es-abstract@^1.5.1, es-abstract@^1.6.1:
     is-callable "^1.1.3"
     is-regex "^1.0.4"
 
+es-fullscreen@^0.3.0:
+  version "0.3.0"
+  resolved "http://registry.npmjs.org/es-fullscreen/-/es-fullscreen-0.3.0.tgz#acdeb5b99d888703bb848d7faa7b60e6ff3def0d"
+  dependencies:
+    babel-runtime "^6.26.0"
+    toxic-decorators "^0.3.8"
+    toxic-predicate-functions "^0.1.4"
+
 es-to-primitive@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/es-to-primitive/-/es-to-primitive-1.2.0.tgz#edf72478033456e8dda8ef09e00ad9650707f377"
@@ -2975,6 +3096,10 @@ event-stream@~3.3.0:
     split "^1.0.1"
     stream-combiner "^0.2.2"
     through "^2.3.8"
+
+eventemitter3@^3.0.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.0.tgz#090b4d6cdbd645ed10bf750d4b5407942d7ba163"
 
 events@^1.0.0:
   version "1.1.1"
@@ -3248,9 +3373,9 @@ flush-write-stream@^1.0.0:
     inherits "^2.0.1"
     readable-stream "^2.0.4"
 
-follow-redirects@^1.3.0:
-  version "1.5.9"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.9.tgz#c9ed9d748b814a39535716e531b9196a845d89c6"
+follow-redirects@^1.0.0, follow-redirects@^1.3.0:
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
   dependencies:
     debug "=3.1.0"
 
@@ -3692,6 +3817,23 @@ http-errors@^1.6.3, http-errors@~1.7.1:
     statuses ">= 1.5.0 < 2"
     toidentifier "1.0.0"
 
+http-proxy-middleware@^0.19.0:
+  version "0.19.1"
+  resolved "https://registry.yarnpkg.com/http-proxy-middleware/-/http-proxy-middleware-0.19.1.tgz#183c7dc4aa1479150306498c210cdaf96080a43a"
+  dependencies:
+    http-proxy "^1.17.0"
+    is-glob "^4.0.0"
+    lodash "^4.17.11"
+    micromatch "^3.1.10"
+
+http-proxy@^1.17.0:
+  version "1.17.0"
+  resolved "https://registry.yarnpkg.com/http-proxy/-/http-proxy-1.17.0.tgz#7ad38494658f84605e2f6db4436df410f4e5be9a"
+  dependencies:
+    eventemitter3 "^3.0.0"
+    follow-redirects "^1.0.0"
+    requires-port "^1.0.0"
+
 http-signature@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/http-signature/-/http-signature-1.2.0.tgz#9aecd925114772f3d95b65a60abb8f7c18fbace1"
@@ -4065,7 +4207,7 @@ is-resolvable@^1.0.0, is-resolvable@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/is-resolvable/-/is-resolvable-1.1.0.tgz#fb18f87ce1feb925169c9a407c19318a3206ed88"
 
-is-retry-allowed@^1.0.0:
+is-retry-allowed@^1.0.0, is-retry-allowed@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/is-retry-allowed/-/is-retry-allowed-1.1.0.tgz#11a060568b67339444033d0125a61a20d564fb34"
 
@@ -6383,6 +6525,10 @@ require-uncached@^1.0.3:
     caller-path "^0.1.0"
     resolve-from "^1.0.0"
 
+requires-port@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
+
 resize-observer-polyfill@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.0.tgz#660ff1d9712a2382baa2cad450a4716209f9ca69"
@@ -7200,6 +7346,48 @@ tough-cookie@~2.4.3:
     psl "^1.1.24"
     punycode "^1.4.1"
 
+toxic-decorators@^0.3.8:
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/toxic-decorators/-/toxic-decorators-0.3.8.tgz#7c4bc31564bc4313d5cee86b2874dcefff99c8e1"
+  dependencies:
+    babel-runtime "^6.25.0"
+    toxic-predicate-functions "^0.1.2"
+    toxic-utils "^0.1.5"
+
+toxic-predicate-functions@^0.1.2, toxic-predicate-functions@^0.1.4, toxic-predicate-functions@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/toxic-predicate-functions/-/toxic-predicate-functions-0.1.5.tgz#50f83378299aad684fe255feeebb8d6648cab64e"
+  dependencies:
+    babel-runtime "^6.23.0"
+
+toxic-predicate-functions@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/toxic-predicate-functions/-/toxic-predicate-functions-0.2.3.tgz#21b8076e29baebcf1101840b75364bf1507ee072"
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    lodash "^4.17.11"
+
+toxic-utils@^0.1.5:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/toxic-utils/-/toxic-utils-0.1.6.tgz#164c3969d97e3258c4bc1e4ed25893415756e297"
+  dependencies:
+    babel-runtime "^6.26.0"
+    toxic-predicate-functions "^0.1.4"
+
+toxic-utils@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/toxic-utils/-/toxic-utils-0.2.0.tgz#c2b487c206acb5038896eda3c2e4d426f4e56298"
+  dependencies:
+    babel-runtime "^6.26.0"
+    toxic-predicate-functions "^0.1.4"
+
+toxic-utils@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/toxic-utils/-/toxic-utils-0.3.0.tgz#66eca4514cc96ad584d33910a440c3a3af8c42e1"
+  dependencies:
+    babel-runtime "^6.26.0"
+    lodash "^4.17.10"
+
 trim-newlines@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/trim-newlines/-/trim-newlines-1.0.0.tgz#5887966bb582a4503a41eb524f7d35011815a613"
@@ -7252,6 +7440,10 @@ type-is@^1.6.16, type-is@~1.6.16:
 typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
+ua-parser-js@^0.7.17, ua-parser-js@^0.7.18:
+  version "0.7.19"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.19.tgz#94151be4c0a7fb1d001af7022fdaca4642659e4b"
 
 uglify-js@3.4.x:
   version "3.4.9"
