@@ -73,6 +73,8 @@ import ImgPreview from './preview/ImgPreview'
 import TxtPreview from './preview/TxtPreview'
 import ListPreview from './preview/ListPreview'
 import UsePreview from './preview/UsePreview'
+import TitlePreview from './preview/TitlePreview'
+import Mousetrap from 'mousetrap'
 
 export default {
   name: 'JsonEditorMain',
@@ -81,7 +83,8 @@ export default {
     ImgPreview,
     TxtPreview,
     UsePreview,
-    ListPreview
+    ListPreview,
+    TitlePreview
   },
   props: {},
   computed: {
@@ -99,7 +102,7 @@ export default {
     }
   },
   mounted() {
-    this.$channel.$on('write-save', () => {
+    this.$channel.$on('write-save', (auto = false) => {
       const richContent = this.getRichContent()
       if (!richContent.length) {
         this.$toast.info('内容不能为空！')
@@ -109,7 +112,8 @@ export default {
         content: richContent,
         desc: this.getPureContent(),
         publish: false,
-        id: this.id
+        id: this.id,
+        auto
       })
     })
     this.$channel.$on('write-publish', () => {
@@ -125,6 +129,12 @@ export default {
         id: this.id
       })
     })
+    Mousetrap.bind(['command+s', 'ctrl+s'], () => {
+      if (this.id) {
+        this.$channel.$emit('write-save', true)
+      }
+      return false
+    })
   },
   methods: {
     getRichContent() {
@@ -135,7 +145,7 @@ export default {
             result.push(item)
           }
         } else if (item.type === 'txt') {
-          if (item.title || item.text) {
+          if (item.text) {
             result.push(item)
           }
         } else if (item.type === 'use') {
@@ -146,31 +156,43 @@ export default {
           if (item.text) {
             result.push(item)
           }
+        } else if (item.type === 'title') {
+          if (item.text) {
+            result.push(item)
+          }
         }
       })
       return result
     },
     getPureContent() {
       let result = ''
-      this.sections.forEach(item => {
-        if (item.type === 'txt' && item.title) {
-          result += `${item.title}，`
+      const convertList = str => {
+        if (!str) {
+          return []
         }
+        while (/\n\n/.test(str)) {
+          str = str.replace(/\n\n/g, '\n')
+        }
+        return str.split('\n')
+      }
+      this.sections.forEach(item => {
         if (item.type === 'txt' && item.text) {
-          result += item.text.replace(/<br>/g, '\n')
+          result += `${item.text.replace(/<br>/g, '\n')} `
+        }
+        if (item.type === 'title' && item.text) {
+          result += `${item.text} `
         }
         if (item.type === 'use' && item.text) {
-          result += item.text.replace(/<br>/g, '\n')
+          result += `${item.text.replace(/<br>/g, '\n')} `
         }
         if (item.type === 'list' && item.text) {
-          let list = item.text
-          while (/\n\n/.test(list)) {
-            list = list.replace(/\n\n/g, '\n')
-          }
-          result += list.replace(/\n/g, ';')
+          const strArr = convertList(item.text)
+          strArr.forEach((p, index) => {
+            result += `${index + 1}:${p} `
+          })
         }
       })
-      return result
+      return result.slice(0, -1)
     },
     handleItemPreview({ index }) {
       this.$store.commit('editor/SWITCH_SECTION', { index })

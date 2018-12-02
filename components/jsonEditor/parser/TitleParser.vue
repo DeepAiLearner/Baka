@@ -23,8 +23,7 @@
 
 <script>
 export default {
-  // name: 'JsonContentTxtParser',
-  name: 'TitleParser',
+  name: 'JsonContentTxtParser',
   props: {
     item: {
       type: Object,

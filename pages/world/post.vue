@@ -71,26 +71,39 @@
         </el-alert>
       </div>
     </div>
-    <post-flow-list/>
+    <flow-list
+      func="getWorldPost"
+      type="seenIds"
+      sort="active"
+    >
+      <ul slot-scope="{ flow }">
+        <post-flow-item
+          v-for="item in flow"
+          :key="item.id"
+          :item="item"
+        />
+      </ul>
+    </flow-list>
   </div>
 </template>
 
 <script>
-import PostFlowList from '~/components/flow/list/PostFlowList'
+import PostFlowItem from '~/components/flow/item/PostFlowItem'
 
 export default {
   name: 'PostWorld',
   async asyncData({ store }) {
     await Promise.all([
-      store.dispatch('flow/initData', {
-        type: 'post',
+      store.dispatch('flow2/initData', {
+        func: 'getWorldPost',
+        type: 'seenIds',
         sort: 'active'
       }),
       store.dispatch('flow/getMeta', { type: 'post' })
     ])
   },
   components: {
-    PostFlowList
+    PostFlowItem
   },
   data() {
     return {

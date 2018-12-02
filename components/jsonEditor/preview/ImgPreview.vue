@@ -35,12 +35,18 @@
         v-if="item.url"
         class="wrapper"
       >
-        <img :src="$resize(item.url)">
+        <v-img
+          :src="item.url"
+          :width="item.width"
+          :height="item.height"
+          :full="true"
+          :lazy="false"
+        />
         <el-input
-          v-model="desc"
+          v-model.trim="desc"
           maxlength="45"
           placeholder="添加图片描述"
-          class="focus-textarea"
+          class="focus-textarea mousetrap"
         />
       </div>
       <el-upload
@@ -114,6 +120,7 @@ export default {
     }
   },
   mounted() {
+    this.getUpToken()
     this.$channel.$on('write-save-done', () => {
       this.saving = false
     })

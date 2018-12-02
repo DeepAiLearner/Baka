@@ -36,8 +36,8 @@
   <div class="text-preview">
     <div class="text-area use-area">
       <textarea
-        v-model="text"
-        class="focus-textarea"
+        v-model.trim="text"
+        class="focus-textarea mousetrap"
         placeholder="添加文字内容"
       />
     </div>
