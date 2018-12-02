@@ -102,7 +102,6 @@ export const actions = {
       state.id !== id || // 两个不同用户
       state.type !== type // 不同的请求类型
     ) {
-      console.error('错误的列表请求')
       return
     }
     const fieldName = `${func}-${sort}`

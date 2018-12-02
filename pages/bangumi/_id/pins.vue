@@ -1,30 +1,39 @@
 <template>
-  <image-flow-list
-    v-if="info"
-    :bangumi-id="info.id"
-    :bangumi-name="info.name"
-  />
+  <div id="bangumi-image-flow">
+    <flow-list
+      :id="info.id"
+      func="getBangumiImage"
+      type="seenIds"
+      sort="active"
+    >
+      <image-waterfall-flow
+        slot-scope="{ flow }"
+        :bangumi-id="info.id"
+        :list="flow"
+      />
+    </flow-list>
+  </div>
 </template>
 
 <script>
-import ImageFlowList from '~/components/flow/list/ImageFlowList'
+import ImageWaterfallFlow from '~/components/image/ImageWaterfallFlow'
 
 export default {
-  name: 'BangumiImage',
-  async asyncData({ store, route, ctx }) {
-    await store.dispatch('flow/initData', {
-      type: 'image',
-      sort: 'active',
-      bangumiId: route.params.id,
-      ctx
+  name: 'BangumiImageFlow',
+  async asyncData({ store, params }) {
+    await store.dispatch('flow2/initData', {
+      id: params.id,
+      func: 'getBangumiImage',
+      type: 'seenIds',
+      sort: 'active'
     })
   },
   components: {
-    ImageFlowList
+    ImageWaterfallFlow
   },
   computed: {
     info() {
-      return this.$store.state.bangumi.info
+      return this.$store.state.bangumi.show
     }
   }
 }

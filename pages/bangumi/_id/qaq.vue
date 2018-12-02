@@ -1,33 +1,36 @@
 <template>
-  <question-flow-list
-    :bangumi-id="id"
-    :bangumi-name="info.name"
-  />
+  <div id="bangumi-question-flow">
+    <flow-list
+      func="getBangumiQAQ"
+      type="seenIds"
+      sort="active"
+    >
+      <ul slot-scope="{ flow }">
+        <question-flow-item
+          v-for="item in flow"
+          :key="item.id"
+          :item="item"
+        />
+      </ul>
+    </flow-list>
+  </div>
 </template>
 
 <script>
-import QuestionFlowList from '~/components/flow/list/QuestionFlowList'
+import QuestionFlowItem from '~/components/flow/item/QuestionFlowItem'
 
 export default {
-  name: 'BangumiQuestion',
-  async asyncData({ store, route, ctx }) {
-    await store.dispatch('flow/initData', {
-      type: 'question',
-      sort: 'active',
-      bangumiId: route.params.id,
-      ctx
+  name: 'BangumiQuestionFlow',
+  async asyncData({ store, params }) {
+    await store.dispatch('flow2/initData', {
+      id: params.id,
+      func: 'getBangumiQAQ',
+      type: 'seenIds',
+      sort: 'active'
     })
   },
   components: {
-    QuestionFlowList
-  },
-  computed: {
-    id() {
-      return +this.$route.params.id
-    },
-    info() {
-      return this.$store.state.bangumi.info
-    }
+    QuestionFlowItem
   }
 }
 </script>

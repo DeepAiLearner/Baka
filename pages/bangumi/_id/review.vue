@@ -138,41 +138,48 @@
         </a>
       </h3>
     </div>
-    <score-flow-list
-      v-if="info"
-      :bangumi-id="info.id"
-      :bangumi-name="info.name"
-    />
+    <flow-list
+      :id="info.id"
+      func="getBangumiScore"
+      type="seenIds"
+      sort="active"
+    >
+      <ul slot-scope="{ flow }">
+        <score-flow-item
+          v-for="item in flow"
+          :key="item.id"
+          :bangumi-id="info.id"
+          :item="item"
+        />
+      </ul>
+    </flow-list>
   </div>
 </template>
 
 <script>
 import BangumiScoreChart from '~/components/bangumi/charts/BangumiScoreChart'
-import ScoreFlowList from '~/components/flow/list/ScoreFlowList'
 import { getBangumiScore } from '~/api2/bangumiApi'
+import ScoreFlowItem from '~/components/flow/item/ScoreFlowItem'
 
 export default {
   name: 'BangumiScore',
-  async asyncData(ctx) {
-    const { id } = ctx.params
-    const data = await Promise.all([
-      getBangumiScore({ id }),
-      ctx.store.dispatch('flow/initData', {
-        type: 'score',
-        sort: 'active',
-        bangumiId: id,
-        ctx
-      })
-    ])
-    if (data[0]) {
-      return {
-        bangumiScore: data[0]
-      }
+  async asyncData({ app, params }) {
+    const data = await getBangumiScore(app, { id: params.id })
+    return {
+      bangumiScore: data
     }
+  },
+  async fetch({ store, params }) {
+    await store.dispatch('flow2/initData', {
+      id: params.id,
+      func: 'getBangumiScore',
+      type: 'seenIds',
+      sort: 'active'
+    })
   },
   components: {
     BangumiScoreChart,
-    ScoreFlowList
+    ScoreFlowItem
   },
   data() {
     return {
@@ -181,7 +188,7 @@ export default {
   },
   computed: {
     info() {
-      return this.$store.state.bangumi.info
+      return this.$store.state.bangumi.show
     },
     totalRate() {
       return this.bangumiScore.total / 20

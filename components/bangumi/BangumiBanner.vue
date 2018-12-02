@@ -148,7 +148,7 @@ export default {
   },
   computed: {
     info() {
-      return this.$store.state.bangumi.info
+      return this.$store.state.bangumi.show
     }
   },
   methods: {

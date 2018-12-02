@@ -1,6 +1,3 @@
-<style lang="scss">
-</style>
-
 <template>
   <section class="bangumi-layout">
     <bangumi-banner/>
@@ -19,8 +16,11 @@ import TabContainer from '~/components/common/TabContainer'
 
 export default {
   name: 'BangumiShowLayout',
-  async asyncData({ route, store, ctx }) {
-    await store.dispatch('bangumi/getBangumi', { ctx, id: route.params.id })
+  validate({ params }) {
+    return /^\d+$/.test(params.id)
+  },
+  async fetch({ params, store }) {
+    await store.dispatch('bangumi/getBangumiInfo', { id: params.id })
   },
   components: {
     BangumiBanner,
@@ -38,12 +38,15 @@ export default {
       ]
     }
   },
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   computed: {
-    id() {
-      return +this.$route.params.id
-    },
     info() {
-      return this.$store.state.bangumi.info
+      return this.$store.state.bangumi.show
     },
     cards() {
       const info = this.info

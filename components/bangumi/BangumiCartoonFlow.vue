@@ -16,7 +16,7 @@
 
   .cartoon {
     width: 198px;
-    height: 406px;
+    height: 335px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     margin: 3px 7px 15px 3px;
     background-color: #fafafa;
@@ -175,6 +175,7 @@
             </div>
             <div class="intro">
               <p class="name oneline">【 {{ item.part }} 】{{ item.name }}</p>
+              <!--
               <div class="social">
                 <span
                   v-if="item.like_count"
@@ -195,8 +196,10 @@
                   {{ item.view_count }}
                 </span>
               </div>
+              -->
             </div>
           </a>
+          <!--
           <div class="about">
             <user-card
               :id="item.user.id"
@@ -214,6 +217,7 @@
               />
             </user-card>
           </div>
+          -->
         </li>
       </ul>
       <load-more-btn

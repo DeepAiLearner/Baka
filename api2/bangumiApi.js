@@ -1,3 +1,7 @@
+export const getBangumiInfo = (ctx, { id }) => {
+  return ctx.$axios.get(`bangumi/${id}/show`)
+}
+
 export const getRecommendedBangumis = ctx => {
   return ctx.$axios.get('bangumi/recommended')
 }

@@ -115,11 +115,6 @@ module.exports = {
     extendRoutes(routes) {
       for (const route of routes) {
         route.props = /:/.test(route.path)
-        if (route.children) {
-          for (const item of route.children) {
-            item.props = /:/.test(item.path)
-          }
-        }
       }
       routes.push({
         name: 'error-fallback',

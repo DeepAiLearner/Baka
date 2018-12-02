@@ -143,6 +143,16 @@ export const getBangumiQAQ = ({
   })
 }
 
+export const getBangumiCartoon = ({ ctx, id, page, count, order_by }) => {
+  return ctx.$axios.get(`bangumi/${id}/cartoon`, {
+    params: {
+      page,
+      take: count,
+      sort: order_by
+    }
+  })
+}
+
 /* ---------- user ---------- */
 
 export const getUserPost = ({ ctx, id, page, count, order_by }) => {

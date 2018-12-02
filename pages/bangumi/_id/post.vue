@@ -1,37 +1,42 @@
 <template>
-  <post-flow-list
-    v-if="info"
-    :bangumi-id="id"
-    :bangumi-name="info.name"
-  />
+  <div id="bangumi-post-flow">
+    <flow-list
+      :id="info.id"
+      func="getBangumiPost"
+      type="seenIds"
+      sort="active"
+    >
+      <ul slot-scope="{ flow }">
+        <post-flow-item
+          v-for="item in flow"
+          :key="item.id"
+          :bangumi-id="info.id"
+          :item="item"
+        />
+      </ul>
+    </flow-list>
+  </div>
 </template>
 
 <script>
-import PostFlowList from '~/components/flow/list/PostFlowList'
+import PostFlowItem from '~/components/flow/item/PostFlowItem'
 
 export default {
-  name: 'BangumiPost',
-  async asyncData({ route, store, ctx }) {
-    const id = route.params.id
-    await Promise.all([
-      store.dispatch('bangumi/getTopPosts', { ctx, id }),
-      store.dispatch('flow/initData', {
-        type: 'post',
-        sort: 'active',
-        bangumiId: id,
-        ctx
-      })
-    ])
+  name: 'BangumiPostFlow',
+  async asyncData({ store, params }) {
+    await store.dispatch('flow2/initData', {
+      id: params.id,
+      func: 'getBangumiPost',
+      type: 'seenIds',
+      sort: 'active'
+    })
   },
   components: {
-    PostFlowList
+    PostFlowItem
   },
   computed: {
-    id() {
-      return +this.$route.params.id
-    },
     info() {
-      return this.$store.state.bangumi.info
+      return this.$store.state.bangumi.show
     }
   }
 }

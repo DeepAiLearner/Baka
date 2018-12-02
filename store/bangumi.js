@@ -1,8 +1,9 @@
 import Api from '~/api/bangumiApi'
 import ScoreApi from '~/api/scoreApi'
-import { getAllBangumi } from '~/api2/bangumiApi'
+import { getAllBangumi, getBangumiInfo } from '~/api2/bangumiApi'
 
 export const state = () => ({
+  show: null,
   follows: null,
   category: {
     data: [],
@@ -77,7 +78,7 @@ export const mutations = {
     state.topFetchedId = id
   },
   SET_BANGUMI_DATA(state, data) {
-    state.info = data
+    state.show = data
   },
   SET_VIDEOS(state, { data, id }) {
     state.videos = {
@@ -148,13 +149,9 @@ export const actions = {
     const tags = await api.tags()
     commit('SET_TAGS', { tags, id })
   },
-  async getBangumi({ state, commit }, { ctx, id }) {
-    if (state.info && state.info.id === +id) {
-      return
-    }
-    const api = new Api(ctx)
-    const data = await api.show(id)
-    commit('SET_BANGUMI_DATA', data)
+  async getBangumiInfo({ commit }, { id }) {
+    const data = await getBangumiInfo(this, { id })
+    data && commit('SET_BANGUMI_DATA', data)
   },
   async getVideos({ state, commit }, { id, ctx }) {
     if (state.videos.id && state.videos.id === id) {

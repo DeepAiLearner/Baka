@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 import generateRequestError from '~/assets/js/generateRequestError'
 
 const isClient = typeof window !== 'undefined'
+const isDev = process.env.NODE_ENV === 'development'
 
 export default ({ $axios, app }) => {
   $axios.setHeader('Accept', 'application/x.api.latest+json')
@@ -24,8 +25,9 @@ export default ({ $axios, app }) => {
         method
       })
     } else {
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`${method}：${config.url}`)
+      if (isDev) {
+        console.log(method, config.url)
+        config.params && console.log('params', config.params)
       }
     }
   })
@@ -50,7 +52,11 @@ export default ({ $axios, app }) => {
         code: err.statusCode,
         message: err.message
       })
+      Message.error(err.message)
+    } else {
+      if (isDev) {
+        console.log(err)
+      }
     }
-    Message.error(err.message)
   })
 }
