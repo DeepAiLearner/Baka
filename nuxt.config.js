@@ -6,6 +6,7 @@ const resolve = file => path.resolve(__dirname, file)
 const CompressionPlugin = require('compression-webpack-plugin')
 const BrotliPlugin = require('brotli-webpack-plugin')
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
+const injectScript = require('./.script')
 
 module.exports = {
   mode: 'universal',
@@ -53,7 +54,20 @@ module.exports = {
         type: 'image/x-icon',
         href: `https://image.calibur.tv/favicon.ico`
       }
-    ]
+    ],
+    script: [
+      {
+        innerHTML: injectScript.baiduStat,
+        type: 'text/javascript',
+        async: true
+      },
+      {
+        innerHTML: injectScript.baiduPush,
+        type: 'text/javascript',
+        async: true
+      }
+    ],
+    __dangerouslyDisableSanitizers: 'script'
   },
 
   /*
@@ -94,6 +108,7 @@ module.exports = {
    * Global middleware
    */
   router: {
+    middleware: ['route-change'],
     extendRoutes(routes) {
       for (const route of routes) {
         route.props = /:/.test(route.path)

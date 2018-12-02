@@ -23,5 +23,8 @@ module.exports = {
     "no-undef": "error",
     "no-unused-vars": "warn",
     "no-else-return": "warn"
+  },
+  globals: {
+    _hmt: true
   }
 }

@@ -39,5 +39,8 @@ export const actions = {
     } catch (e) {
       commit('SET_USER', {})
     }
+  },
+  async getNotification() {
+    console.log('getNotification')
   }
 }
