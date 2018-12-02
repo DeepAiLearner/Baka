@@ -1,7 +1,5 @@
 <style lang="scss">
-#bangumi-recommended {
-  margin-bottom: 15px;
-
+#bangumi-hots {
   .sub-title {
     font-size: 15px;
     margin-left: 0 !important;
@@ -64,6 +62,7 @@
       line-height: 18px;
       height: 18px;
       font-size: 12px;
+      margin-bottom: 3px;
       color: #222;
     }
 
@@ -83,10 +82,10 @@
 <template>
   <div
     v-if="bangumis.length"
-    id="bangumi-recommended"
+    id="bangumi-hots"
   >
     <h3 class="sub-title">
-      推荐番剧
+      热门番剧
       <span @click="choiceTags">
         <i
           :style="{ transform: `rotate(${counter * 360}deg)` }"
@@ -104,13 +103,12 @@
           :href="$alias.bangumi(item.id)"
           target="_blank"
         >
-          <img :src="$resize(item.avatar, { width: 120 })">
+          <img :src="$resize(item.avatar, { width: 80 })">
           <div>
             <p
               class="oneline"
               v-text="'《' + item.name + '》'"
             />
-            <span v-text="item.tag"/>
           </div>
         </a>
       </li>
@@ -120,7 +118,7 @@
 
 <script>
 export default {
-  name: 'BangumiRecommended',
+  name: 'BangumiHots',
   props: {
     bangumis: {
       type: Array,
@@ -148,7 +146,7 @@ export default {
   },
   methods: {
     choiceTags() {
-      if ((this.counter + 1) * this.display >= this.bangumis.length) {
+      if ((this.counter + 1) * this.display >= this.list.length) {
         this.counter = 0
       } else {
         this.counter++

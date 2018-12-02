@@ -178,15 +178,17 @@
     padding-bottom: 6px;
     font-weight: 500;
     color: #2d2f33;
+    border-bottom: 1px solid;
+    border-bottom-color: transparent;
 
     &:hover {
       border-radius: 5px;
       color: $color-blue-light;
     }
 
-    &.router-link-active {
+    &.nuxt-link-active {
       color: $color-blue-normal;
-      border-bottom: 1px solid $color-blue-light;
+      border-bottom-color: $color-blue-light;
       position: relative;
 
       &:before {
@@ -205,23 +207,6 @@
       }
     }
   }
-}
-
-.image-lazy-init {
-  opacity: 0.3;
-  background-color: #ccc;
-}
-
-.image-lazy-active {
-  transition: background-color, opacity .15s linear;
-  opacity: 1;
-  background-color: transparent;
-}
-
-.image-shim {
-  width: auto !important;
-  display: block;
-  margin: 0 auto 5px auto;
 }
 
 .text-center {

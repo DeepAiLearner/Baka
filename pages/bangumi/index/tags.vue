@@ -66,105 +66,83 @@
     id="bangumi-tags"
     class="main"
   >
-    <v-header type="banner"/>
-    <v-layout :affix-top="235">
-      <div class="breadcrumb-links">
-        <nuxt-link :to="$alias.bangumiNews">新番放送</nuxt-link>
-        <nuxt-link :to="$alias.bangumiTag()">分类索引</nuxt-link>
-      </div>
-      <div class="tags">
-        <h2 class="sub-title">标签列表</h2>
-        <ul>
-          <li
-            v-for="tag in tags"
-            :key="tag.id"
-            @click="selectTag(tag)"
+    <div class="tags">
+      <h2 class="sub-title">标签列表</h2>
+      <ul>
+        <li
+          v-for="tag in tags"
+          :key="tag.id"
+          @click="selectTag(tag)"
+        >
+          <a
+            :class="{ 'selected': tag.selected }"
+            href="javascript:;"
+            class="tag-btn"
+          >{{ tag.name }}</a>
+        </li>
+      </ul>
+    </div>
+    <div
+      v-if="bangumis.total"
+      class="bangumis"
+    >
+      <h2 class="sub-title">番剧列表</h2>
+      <ul>
+        <li
+          v-for="item in bangumis.data"
+          :key="item.id"
+          class="bangumi"
+        >
+          <a
+            :href="$alias.bangumi(item.id)"
+            target="_blank"
+            class="avatar"
           >
-            <a
-              :class="{ 'selected': tag.selected }"
-              href="javascript:;"
-              class="tag-btn"
-            >{{ tag.name }}</a>
-          </li>
-        </ul>
-      </div>
-      <div
-        v-if="bangumis.total"
-        class="bangumis"
-      >
-        <h2 class="sub-title">番剧列表</h2>
-        <ul>
-          <li
-            v-for="item in bangumis.data"
-            :key="item.id"
-            class="bangumi"
-          >
+            <v-img
+              :src="item.avatar"
+              :poster="true"
+              size="90"
+            />
+          </a>
+          <div class="content">
             <a
               :href="$alias.bangumi(item.id)"
               target="_blank"
-              class="avatar"
-            >
-              <v-img
-                :src="item.avatar"
-                :poster="true"
-                size="90"
-              />
-            </a>
-            <div class="content">
-              <a
-                :href="$alias.bangumi(item.id)"
-                target="_blank"
-                class="title"
-                v-text="item.name"
-              />
-              <p
-                class="desc"
-                v-text="item.summary"
-              />
-            </div>
-          </li>
-        </ul>
-        <load-more-btn
-          :no-more="bangumis.noMore"
-          :loading="loading"
-          :auto="true"
-          @fetch="loadBangumis"
-        />
-      </div>
-      <no-content v-else-if="showEmpty"/>
-      <template slot="aside">
-        <bangumi-recommended :bangumis="recommendedBangumis"/>
-      </template>
-    </v-layout>
+              class="title"
+              v-text="item.name"
+            />
+            <p
+              class="desc"
+              v-text="item.summary"
+            />
+          </div>
+        </li>
+      </ul>
+      <load-more-btn
+        :no-more="bangumis.noMore"
+        :loading="loading"
+        :auto="true"
+        @fetch="loadBangumis"
+      />
+    </div>
+    <no-content v-else-if="showEmpty"/>
   </div>
 </template>
 
 <script>
-import BangumiRecommended from '~/components/bangumi/BangumiRecommended'
-import {
-  getAllBangumiTag,
-  getRecommendedBangumis,
-  getCategoryBangumis
-} from '~/api2/bangumiApi'
+import { getAllBangumiTag, getCategoryBangumis } from '~/api2/bangumiApi'
 
 export default {
   name: 'BangumiTags',
   async asyncData({ app }) {
-    const data = await Promise.all([
-      getAllBangumiTag(app),
-      getRecommendedBangumis(app)
-    ])
+    const data = await getAllBangumiTag(app)
     return {
-      recommendedBangumis: data[1],
-      tags: data[0].map(_ => {
+      tags: data.map(_ => {
         return Object.assign(_, {
           selected: false
         })
       })
     }
-  },
-  components: {
-    BangumiRecommended
   },
   head: {
     title: '分类索引 - 番剧'

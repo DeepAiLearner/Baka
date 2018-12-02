@@ -6,6 +6,10 @@ export const getRecommendedBangumis = ctx => {
   return ctx.$axios.get('bangumi/recommended')
 }
 
+export const getHotBangumis = ctx => {
+  return ctx.$axios.get('bangumi/hots')
+}
+
 export const getReleasedBangumis = ctx => {
   return ctx.$axios.get('bangumi/released')
 }
