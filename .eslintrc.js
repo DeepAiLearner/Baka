@@ -25,6 +25,7 @@ module.exports = {
     "no-else-return": "warn"
   },
   globals: {
-    _hmt: true
+    _hmt: true,
+    M: true
   }
 }

@@ -14,8 +14,9 @@
   .image {
     width: 100%;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    background-color: #fafafa;
+    background-color: #f2f3f5;
+    box-shadow: 0 1px 3px 0 rgba(80, 80, 80, 0.11);
+    border-radius: 8px;
 
     .image-box {
       position: relative;
@@ -112,14 +113,6 @@
       height: 51px;
       padding: 10px 15px;
       border-top: 1px solid #f2f2f2;
-
-      .user-avatar {
-        @extend %avatar;
-      }
-
-      .bangumi-avatar {
-        border-radius: 4px;
-      }
 
       .user-avatar,
       .bangumi-avatar {

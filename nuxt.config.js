@@ -12,7 +12,9 @@ module.exports = {
   mode: 'universal',
   env: {
     baseUrl: process.env.BASE_URL,
-    cdnHost: qiniu.host
+    cdnHost: qiniu.host,
+    SENTRY_URL: 'https://c89b4ce2cfbf44e3bab148e0b7fa31df@sentry.io/1243412',
+    RELEASE: new Date().toLocaleString()
   },
   /*
   ** Headers of the page
@@ -88,7 +90,8 @@ module.exports = {
     '~/plugins/element-ui',
     '~/plugins/global-prototype',
     '~/plugins/global-components',
-    { src: '~/plugins/client-prototype', ssr: false }
+    { src: '~/plugins/client-prototype', ssr: false },
+    { src: '~/plugins/client-namespace', ssr: false }
   ],
 
   /*

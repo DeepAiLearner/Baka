@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
+    "@sentry/node": "^4.4.1",
     "chimee": "^0.11.0",
     "chimee-kernel-flv": "^1.4.10",
     "chimee-plugin-center-state": "^0.0.12",
@@ -30,6 +31,7 @@
     "normalize.css": "^8.0.0",
     "nuxt": "2.3.4",
     "particles.js": "^2.0.0",
+    "raven-js": "^3.27.0",
     "timeago.js": "^4.0.0-beta.1",
     "v-charts": "^1.19.0",
     "vue-clipboards": "^1.2.4",

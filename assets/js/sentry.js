@@ -2,11 +2,14 @@ import Vue from 'vue'
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
 
-export default class {
-  constructor({ url, version, env }) {
-    this.url = url
-    this.version = version
-    this.env = env
+export default new class {
+  constructor() {
+    this.version = process.env.RELEASE
+    this.env = process.env.NODE_ENV
+    this.url = process.env.SENTRY_URL
+    this.Raven = this.init()
+    this.setExtrasData()
+    return this
   }
 
   init() {
@@ -14,69 +17,90 @@ export default class {
       Raven.config(this.url, {
         release: this.version,
         environment: this.env,
+        whitelistUrls: [/jianshu\.com/, /jianshu\.io/],
         ignoreUrls: [/^file:\/\//],
-        shouldSendCallback(data) {
-          let shouldSend = true
-          try {
-            const exception = data.exception.values[0]
-            shouldSend = exception.stacktrace.frames.length > 1
-          } catch (e) {
-            shouldSend = false
-          }
-          return shouldSend
-        },
         ignoreErrors: [
-          'Unexpected token', // https://stackoverflow.com/questions/29763557/syntaxerror-unexpected-token-o-at-object-parse-native-angularjs
-          'TuiaMedia is not defined',
-          /MyAppGet.*AtPoint/,
-          /UCArticleFinderJS/,
-          '网络错误',
-          '网络请求超时',
-          '您找的资源不存在',
-          'Cannot read property',
-          'is not defined',
-          'is not a function',
-          'is not an object (evaluating', // https://github.com/facebook/react-native/issues/17348
-          "canvasList.forEach is not a function. (In 'canvasList.forEach', 'canvasList.forEach' is undefined)",
-          /<anonymous>/,
-          'Maximum call stack size exceeded', // QQ Browser 9.0.2524
-          /('indexOf' of undefined|this.position.indexOf)/, // element-ui notification bug
-          'native code',
-          /Cannot read property '(\w|\W)+' of (undefined|null)/, // https://github.com/vuejs/vue/issues/8399
-          "Can't find variable:",
-          'Not implemented', // windows7 音频播放的问题
-          'Geetest',
-          'too much recursion',
-          'Failed to execute',
-          'must be a dictionary',
-          'Cannot redefine property',
-          "Object doesn't support this action", // https://zenorocha.github.io/clipboard.js
-          'undefined or null reference',
-          'Unexpected end of input',
-          'HTMLMediaElement',
-          'nvalid regular expression: missing /',
-          'this.position is undefined' // firefox element-UI notification horizontalClass
+          'Uncaught TypeError: value.hasOwnProperty is not a function'
         ]
       })
         .addPlugin(RavenVue, Vue)
         .install()
+      return Raven
     } catch (e) {
-      Raven.captureException(e)
+      return null
     }
   }
 
-  report() {
+  setPageInfo(pageName, abTest = 0) {
     try {
-      const dom = undefined
-      const rect = dom.getBoundingClientRect()
-      return (
-        rect.top < window.innerHeight &&
-        rect.bottom > 0 &&
-        (rect.left < window.innerWidth && rect.right > 0)
-      )
-    } catch (e) {
-      e.message = '---------- test sentry report ----------'
-      Raven.captureException(e)
-    }
+      Raven.setTagsContext({
+        pageName,
+        abTest
+      })
+    } catch (e) {}
   }
-}
+
+  setExtrasData({ requestId, viaId } = {}) {
+    try {
+      Raven.setTagsContext({
+        'Request-Id': requestId || 'none',
+        'Via-Id': viaId || 'none',
+        'First-Referrer-Host': document.referrer.split('?')[0] || 'none'
+      })
+    } catch (e) {}
+  }
+
+  setUserInfo(user) {
+    if (!user) {
+      return
+    }
+    try {
+      Raven.setUserContext(user)
+    } catch (e) {}
+  }
+
+  setResponseStack(obj) {
+    try {
+      const context = Raven.getContext()
+      const extra = { ...context.extra }
+      extra['Response-Stack']
+        ? extra['Response-Stack'].unshift(obj)
+        : (extra['Response-Stack'] = [obj])
+      if (extra['Response-Stack'].length > 5) {
+        extra['Response-Stack'].pop()
+      }
+      Raven.setExtraContext()
+      Raven.setExtraContext(extra)
+    } catch (e) {}
+  }
+
+  setPageViewStack(url) {
+    try {
+      const context = Raven.getContext()
+      const extra = { ...context.extra }
+      extra['PageView-Stack']
+        ? extra['PageView-Stack'].unshift(url)
+        : (extra['PageView-Stack'] = [url])
+      if (extra['PageView-Stack'].length > 5) {
+        extra['PageView-Stack'].pop()
+      }
+      Raven.setExtraContext()
+      Raven.setExtraContext(extra)
+    } catch (e) {}
+  }
+
+  setRequestStack(obj) {
+    try {
+      const context = Raven.getContext()
+      const extra = { ...context.extra }
+      extra['Request-Stack']
+        ? extra['Request-Stack'].unshift(obj)
+        : (extra['Request-Stack'] = [obj])
+      if (extra['Request-Stack'].length > 5) {
+        extra['Request-Stack'].pop()
+      }
+      Raven.setExtraContext()
+      Raven.setExtraContext(extra)
+    } catch (e) {}
+  }
+}()
