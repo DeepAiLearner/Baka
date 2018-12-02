@@ -71,8 +71,7 @@
 
     .body {
       background: #fff;
-      padding: 22px 0 14px;
-      border-top: 1px solid #e5e9ef;
+      padding: 18px 0 14px;
       overflow: hidden;
 
       .main {
@@ -82,16 +81,23 @@
       .content {
         min-height: 300px;
 
-        .image {
-          margin-bottom: 12px;
-        }
-
         .text-area {
           line-height: 24px;
-          padding: 2px 0;
           font-size: 14px;
           overflow: hidden;
           word-wrap: break-word;
+
+          p {
+            margin-bottom: 10px;
+          }
+        }
+
+        .image-package {
+          margin-bottom: 20px;
+
+          .image {
+            margin-top: 12px;
+          }
         }
       }
 
@@ -383,30 +389,34 @@ import CommentMain from '~/components/comments/CommentMain'
 import PostCommentItem from '~/components/post/PostCommentItem'
 import PostCommentForm from '~/components/post/PostCommentForm'
 import SocialPanel from '~/components/common/SocialPanel'
+import { getPostInfo } from '~/api2/postApi'
 
 export default {
   name: 'PostShow',
-  async asyncData(ctx) {
-    const only = ctx.route.query.only
-      ? parseInt(ctx.route.query.only, 10)
-        ? 1
-        : 0
-      : 0
-    const id = ctx.route.params.id
-    await Promise.all([
-      ctx.store.dispatch('post/getPost', {
-        id,
-        ctx,
-        only
-      }),
-      ctx.store.dispatch('comment/getMainComments', {
-        ctx,
-        id,
-        type: 'post',
-        onlySeeMaster: only,
-        seeReplyId: ctx.route.query['comment-id']
+  validate({ params }) {
+    return /^\d+$/.test(params.id)
+  },
+  asyncData({ query, params, app, error }) {
+    return getPostInfo(app, {
+      id: params.id,
+      only: query.only ? (parseInt(query.only, 10) ? 1 : 0) : 0
+    })
+      .then(data => {
+        return {
+          post: data.post,
+          bangumi: data.bangumi,
+          master: data.user
+        }
       })
-    ])
+      .catch(e => error(e))
+  },
+  fetch({ store, query, params }) {
+    store.dispatch('comment/getMainComments', {
+      id: params.id,
+      type: 'post',
+      onlySeeMaster: query.only ? (parseInt(query.only, 10) ? 1 : 0) : 0,
+      seeReplyId: query['comment-id']
+    })
   },
   components: {
     CommentMain,
@@ -433,25 +443,22 @@ export default {
       ]
     }
   },
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
+      bangumi: null,
+      post: null,
+      master: null,
       loadingToggleLike: false,
       loadingToggleMark: false
     }
   },
   computed: {
-    resource() {
-      return this.$store.state.post.info
-    },
-    bangumi() {
-      return this.resource.bangumi
-    },
-    post() {
-      return this.resource.post
-    },
-    master() {
-      return this.resource.user
-    },
     total() {
       return this.$store.state.comment.total + 1
     },
@@ -499,59 +506,10 @@ export default {
           this.$toast.error(e)
         })
     },
-    async toggleLike() {
-      if (!this.$store.state.login) {
-        this.$channel.$emit('sign-in')
-        return
-      }
-      if (this.isMaster) {
-        this.$toast.info('不能赞赏自己的帖子')
-        return
-      }
-      if (this.loadingToggleLike) {
-        return
-      }
-      this.loadingToggleLike = true
-      try {
-        const result = await this.$store.dispatch('post/toggleLike', {
-          ctx: this,
-          id: this.post.id
-        })
-        if (result) {
-          this.$store.commit('USE_COIN')
-        }
-      } catch (err) {
-        this.$toast.error(err)
-      } finally {
-        this.loadingToggleLike = false
-      }
-    },
-    async toggleMark() {
-      if (!this.$store.state.login) {
-        this.$channel.$emit('sign-in')
-        return
-      }
-      if (this.isMaster) {
-        this.$toast.info('不能收藏自己的帖子')
-        return
-      }
-      if (this.loadingToggleMark) {
-        return
-      }
-      this.loadingToggleMark = true
-      try {
-        await this.$store.dispatch('post/toggleMark', {
-          ctx: this,
-          id: this.post.id
-        })
-      } catch (err) {
-        this.$toast.error(err)
-      } finally {
-        this.loadingToggleMark = false
-      }
-    },
     handleBangumiFollow(result) {
-      this.$store.commit('post/FOLLOW_BANGUMI', result)
+      this.$store.commit('post/FOLLOW_BANGUMI', () => {
+        this.bangumi.followed = result
+      })
     }
   }
 }

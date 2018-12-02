@@ -1,4 +1,4 @@
-import Api from '~/api/commentApi'
+import * as API from '~/api2/commentApi'
 import { orderBy } from 'lodash'
 
 export const state = () => ({
@@ -171,7 +171,7 @@ export const mutations = {
 export const actions = {
   async getMainComments(
     { state, commit },
-    { ctx, type, id, onlySeeMaster, seeReplyId, firstRequest }
+    { type, id, onlySeeMaster, seeReplyId, firstRequest }
   ) {
     // 如果已经请求过数据了
     if (state.type) {
@@ -203,8 +203,7 @@ export const actions = {
       // 如果没请求过数据，初始化 type
       commit('INIT_FETCH_TYPE', { type })
     }
-    const api = new Api(ctx)
-    const comments = await api.getMainCommentList({
+    const comments = await API.getMainCommentList(this, {
       type,
       id,
       onlySeeMaster,
@@ -213,22 +212,20 @@ export const actions = {
     })
     comments && commit('SET_MAIN_COMMENTS', { comments, seeReplyId, id })
   },
-  async getSubComments({ state, commit }, { ctx, type, id }) {
+  async getSubComments({ state, commit }, { type, id }) {
     const store = state.list.filter(_ => _.id === id)[0].comments
     if (store.noMore) {
       return
     }
-    const api = new Api(ctx)
-    const comments = await api.getSubCommentList({
+    const comments = await API.getSubCommentList(this, {
       type,
       id,
       maxId: store.maxId
     })
     commit('SET_SUB_COMMENTS', { comments, id })
   },
-  async createMainComment({ commit }, { ctx, images, content, type, id }) {
-    const api = new Api(ctx)
-    const result = await api.createMainComment({
+  async createMainComment({ commit }, { images, content, type, id }) {
+    const result = await API.createMainComment(this, {
       type,
       id,
       content,
@@ -237,9 +234,8 @@ export const actions = {
     commit('CREATE_MAIN_COMMENT', result.data)
     return result
   },
-  async createSubComment({ commit }, { ctx, id, type, content, targetUserId }) {
-    const api = new Api(ctx)
-    const result = await api.createSubComment({
+  async createSubComment({ commit }, { id, type, content, targetUserId }) {
+    const result = await API.createSubComment(this, {
       id,
       type,
       content,
@@ -248,34 +244,30 @@ export const actions = {
     commit('CREATE_SUB_COMMENT', { id, comment: result.data })
     return result
   },
-  async deleteSubComment({ commit }, { ctx, id, type, parentId }) {
-    const api = new Api(ctx)
-    await api.deleteSubComment({
+  async deleteSubComment({ commit }, { id, type, parentId }) {
+    await API.deleteSubComment(this, {
       id,
       type
     })
     commit('DELETE_SUB_COMMENT', { parentId, id })
   },
-  async deleteMainComment({ commit }, { ctx, id, type }) {
-    const api = new Api(ctx)
-    await api.deleteMainComment({
+  async deleteMainComment({ commit }, { id, type }) {
+    await API.deleteMainComment(this, {
       id,
       type
     })
     commit('DELETE_MAIN_COMMENT', { id })
   },
-  async toggleLikeSubComment({ commit }, { ctx, type, id, parentId }) {
-    const api = new Api(ctx)
+  async toggleLikeSubComment({ commit }, { type, id, parentId }) {
     commit('TOGGLE_LIKE_SUB_COMMENT', { id, parentId })
-    await api.toggleLikeSubComment({
+    await API.toggleLikeSubComment(this, {
       type,
       id
     })
   },
-  async toggleLikeMainComment({ commit }, { ctx, type, id }) {
-    const api = new Api(ctx)
+  async toggleLikeMainComment({ commit }, { type, id }) {
     commit('TOGGLE_LIKE_MAIN_COMMENT', { id })
-    await api.toggleLikeMainComment({
+    await API.toggleLikeMainComment(this, {
       type,
       id
     })
