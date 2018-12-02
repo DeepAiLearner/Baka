@@ -7,6 +7,12 @@ export default ({ $axios, app }) => {
     $axios.setToken(app.store.state.user.token, 'Bearer')
   }
 
+  $axios.onRequest(config => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`${config.method.toLocaleUpperCase()}：${config.url}`)
+    }
+  })
+
   $axios.onResponse(resp => {
     return resp.data.data
   })

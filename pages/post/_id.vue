@@ -410,8 +410,8 @@ export default {
       })
       .catch(e => error(e))
   },
-  fetch({ store, query, params }) {
-    store.dispatch('comment/getMainComments', {
+  async fetch({ store, query, params }) {
+    await store.dispatch('comment/getMainComments', {
       id: params.id,
       type: 'post',
       onlySeeMaster: query.only ? (parseInt(query.only, 10) ? 1 : 0) : 0,
