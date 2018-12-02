@@ -251,27 +251,33 @@
 <script>
 import CreateRoleForm from '~/components/bangumi/forms/CreateRoleForm'
 import CommentMain from '~/components/comments/CommentMain'
+import { getCartoonRoleInfo } from '~/api2/cartoonRoleApi'
 
 export default {
   name: 'RoleShow',
-  async asyncData(ctx) {
-    const id = ctx.route.params.id
-    await Promise.all([
-      ctx.store.dispatch('cartoonRole/getRoleInfo', { ctx, id }),
-      ctx.store.dispatch('cartoonRole/getFansList', {
-        ctx,
-        bangumiId: 0,
-        roleId: id,
-        sort: 'new',
-        reset: false
-      }),
-      ctx.store.dispatch('comment/getMainComments', {
-        ctx,
-        id,
-        type: 'role',
-        seeReplyId: ctx.route.query['comment-id']
+  validate({ params }) {
+    return /^\d+$/.test(params.id)
+  },
+  async asyncData({ app, params, error }) {
+    // TODO：add getFansList
+    return getCartoonRoleInfo(app, {
+      id: params.id
+    })
+      .then(data => {
+        return {
+          info: data,
+          role: data.data,
+          bangumi: data.bangumi
+        }
       })
-    ])
+      .catch(e => error(e))
+  },
+  async fetch({ store, params, query }) {
+    await store.dispatch('comment/getMainComments', {
+      id: params.id,
+      type: 'role',
+      seeReplyId: query['comment-id']
+    })
   },
   head() {
     return {
@@ -290,8 +296,17 @@ export default {
     CreateRoleForm,
     CommentMain
   },
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
+      info: null,
+      role: null,
+      bangumi: null,
       toggleFansListModal: false,
       loadingRoleFans: false,
       showEditModal: false,
@@ -299,20 +314,10 @@ export default {
     }
   },
   computed: {
-    id() {
-      return +this.$route.params.id
-    },
-    info() {
-      return this.$store.state.cartoonRole.info
-    },
-    role() {
-      return this.info.data
-    },
-    bangumi() {
-      return this.info.bangumi
-    },
     fans() {
-      return this.$store.state.cartoonRole.fans.new
+      return {
+        data: []
+      }
     },
     computeRoleAlias() {
       return this.role.alias.split(',')
@@ -326,7 +331,7 @@ export default {
         : this.$store.state.cartoonRole.fans.hot.data
     },
     noMoreFans() {
-      return this.$store.state.cartoonRole.fans[this.focusRoleSort].noMore
+      return true
     }
   },
   methods: {
