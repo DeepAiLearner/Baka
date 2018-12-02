@@ -357,20 +357,31 @@ import EditAlbumForm from '~/components/image/EditAlbumForm'
 import EditImageForm from '~/components/image/EditImageForm'
 import SocialPanel from '~/components/common/SocialPanel'
 import ImagePreview from '~/components/common/ImagePreview/ImagePreview'
+import { getImageInfo } from '~/api2/imageApi'
 
 export default {
   name: 'ImageShow',
-  async asyncData(ctx) {
-    const id = ctx.route.params.id
-    await Promise.all([
-      ctx.store.dispatch('image/show', { ctx, id }),
-      ctx.store.dispatch('comment/getMainComments', {
-        ctx,
-        id,
-        type: 'image',
-        seeReplyId: ctx.route.query['comment-id']
+  async asyncData({ app, params, error }) {
+    return getImageInfo(app, {
+      id: params.id
+    })
+      .then(data => {
+        return {
+          info: data,
+          user: data.user,
+          bangumi: data.bangumi,
+          source: data.source,
+          images: data.images
+        }
       })
-    ])
+      .catch(e => error(e))
+  },
+  async fetch({ store, params, query }) {
+    await store.dispatch('comment/getMainComments', {
+      id: params.id,
+      type: 'image',
+      seeReplyId: query['comment-id']
+    })
   },
   components: {
     vParts,
@@ -396,6 +407,11 @@ export default {
   },
   data() {
     return {
+      info: null,
+      user: null,
+      source: null,
+      bangumi: [],
+      images: [],
       loadingFollowAlbum: false,
       loadingEditImages: false,
       showAllPart: false,
@@ -405,21 +421,6 @@ export default {
   computed: {
     id() {
       return +this.$route.params.id
-    },
-    info() {
-      return this.$store.state.image.show
-    },
-    user() {
-      return this.info.user
-    },
-    source() {
-      return this.info.source
-    },
-    images() {
-      return this.info.images
-    },
-    bangumi() {
-      return this.info.bangumi
     },
     cartoon() {
       return []

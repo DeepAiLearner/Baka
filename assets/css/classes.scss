@@ -58,14 +58,15 @@
 
 .breadcrumb {
   height: 20px;
+  margin-top: 0;
   margin-bottom: 30px;
   font-family: 'iconfont' !important;
   position: relative;
-  padding-left: 40px;
+  padding-left: 20px;
 
   &:before {
     position: absolute;
-    left: 10px;
+    left: -4px;
     top: 0;
     content: "\e6b1";
     color: $color-blue-normal;
@@ -167,11 +168,13 @@
 }
 
 .breadcrumb-links {
+  margin-bottom: 16px;
+
   a {
     font-size: 14px;
     transition: .2s;
-    margin: 0 12px 30px;
     display: inline-block;
+    margin-right: 24px;
     padding-bottom: 6px;
     font-weight: 500;
     color: #2d2f33;
@@ -181,7 +184,7 @@
       color: $color-blue-light;
     }
 
-    &.nuxt-link-active {
+    &.router-link-active {
       color: $color-blue-normal;
       border-bottom: 1px solid $color-blue-light;
       position: relative;
@@ -284,23 +287,16 @@
   }
 }
 
-.href-fade-blue {
+.image-package {
+  margin-bottom: 3px;
+}
+
+.blue-link {
   transition: $fade-time;
   color: $color-link;
   cursor: pointer;
 
   &:hover {
     color: $color-blue-normal;
-  }
-}
-
-.center-layout {
-  width: 690px;
-  max-width: 100%;
-  margin: 0 auto;
-
-  @media (max-width: 1080px) {
-    max-width: none;
-    width: 532px;
   }
 }

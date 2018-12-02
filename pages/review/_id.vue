@@ -201,7 +201,6 @@
 </template>
 
 <script>
-import ToggleApi from '~/api/toggleApi'
 import ScoreApi from '~/api/scoreApi'
 import CommentMain from '~/components/comments/CommentMain'
 import JsonContent from '~/components/jsonEditor/JsonContent'
@@ -288,26 +287,10 @@ export default {
     }
   },
   methods: {
-    async toggleLike() {
-      if (this.loadingToggleLike) {
-        return
-      }
-      this.loadingToggleLike = true
-      const api = new ToggleApi(this)
-      try {
-        const result = await api.like({
-          type: 'score',
-          id: this.info.id
-        })
-        this.$store.commit('score/LIKE_SCORE', result)
-      } catch (e) {
-        this.$toast.error(e)
-      } finally {
-        this.loadingToggleLike = false
-      }
-    },
     handleBangumiFollow(result) {
-      this.$store.commit('score/FOLLOW_BANGUMI', result)
+      this.$store.commit('score/FOLLOW_BANGUMI', () => {
+        this.bangumi.followed = result
+      })
     },
     deleteScore() {
       this.$confirm('删除后无法找回, 是否继续?', '提示', {
