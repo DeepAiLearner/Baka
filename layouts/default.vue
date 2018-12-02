@@ -39,6 +39,7 @@ export default {
     vSign
   },
   mounted() {
+    this.$store.dispatch('initAuth')
     this.$store.dispatch('bangumi/getAllBangumi')
   }
 }

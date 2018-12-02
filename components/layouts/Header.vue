@@ -510,7 +510,7 @@ $search-height: 32px;
             </v-search>
             <v-search-history/>
           </div>
-          <template v-if="user">
+          <template v-if="isAuth">
             <template v-if="isLogin">
               <el-popover
                 ref="popover"
@@ -730,6 +730,9 @@ export default {
     },
     isLogin() {
       return this.$store.state.login
+    },
+    isAuth() {
+      return this.$store.state.isAuth
     },
     user() {
       return this.$store.state.user
