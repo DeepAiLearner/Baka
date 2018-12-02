@@ -206,23 +206,49 @@ import ScoreApi from '~/api/scoreApi'
 import CommentMain from '~/components/comments/CommentMain'
 import JsonContent from '~/components/jsonEditor/JsonContent'
 import SocialPanel from '~/components/common/SocialPanel'
+import { getScoreInfo } from '~/api2/scoreApi'
+
+const labelMap = {
+  lol: '笑点',
+  cry: '泪点',
+  fight: '燃点',
+  moe: '萌点',
+  sound: '音乐',
+  vision: '画面',
+  story: '情节',
+  role: '人设',
+  express: '内涵',
+  style: '美感'
+}
+const columns = Object.keys(labelMap)
 
 export default {
   name: 'ScoreShow',
-  async asyncData(ctx) {
-    const id = ctx.route.params.id
-    await Promise.all([
-      ctx.store.dispatch('score/getShow', {
-        ctx,
-        id
-      }),
-      ctx.store.dispatch('comment/getMainComments', {
-        ctx,
-        id,
-        type: 'score',
-        seeReplyId: ctx.route.query['comment-id']
+  validate({ params }) {
+    return /^\d+$/.test(params.id)
+  },
+  asyncData({ app, params, error }) {
+    return getScoreInfo(app, { id: params.id })
+      .then(data => {
+        const info = {}
+        Object.keys(data).forEach(key => {
+          const value = data[key]
+          info[key] = columns.indexOf(key) !== -1 ? +value : value
+        })
+        return {
+          user: data.user,
+          bangumi: data.bangumi,
+          info
+        }
       })
-    ])
+      .catch(e => error(e))
+  },
+  async fetch({ store, query, params }) {
+    await store.dispatch('comment/getMainComments', {
+      id: params.id,
+      type: 'score',
+      seeReplyId: query['comment-id']
+    })
   },
   components: {
     CommentMain,
@@ -244,39 +270,16 @@ export default {
     }
   },
   data() {
-    const labelMap = {
-      lol: '笑点',
-      cry: '泪点',
-      fight: '燃点',
-      moe: '萌点',
-      sound: '音乐',
-      vision: '画面',
-      story: '情节',
-      role: '人设',
-      express: '内涵',
-      style: '美感'
-    }
     return {
+      info: null,
+      bangumi: null,
+      user: null,
       labelMap,
-      columns: Object.keys(labelMap),
+      columns,
       loadingToggleLike: false
     }
   },
   computed: {
-    info() {
-      const result = {}
-      Object.keys(this.$store.state.score.show).forEach(key => {
-        const value = this.$store.state.score.show[key]
-        result[key] = this.columns.indexOf(key) !== -1 ? +value : value
-      })
-      return result
-    },
-    bangumi() {
-      return this.info.bangumi
-    },
-    user() {
-      return this.info.user
-    },
     currentUserId() {
       return this.$store.state.login ? this.$store.state.user.id : 0
     },
