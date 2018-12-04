@@ -42,7 +42,7 @@ export default {
   mixins: [flowMixin],
   data() {
     return {
-      flowType: 'post'
+      flowType: 'getUserPost'
     }
   },
   computed: {

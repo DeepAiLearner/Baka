@@ -24,7 +24,7 @@ export default {
       return 'active'
     },
     source() {
-      return this.$store.state.flow[this.flowType][this.fetchSort]
+      return this.$store.state.flow2.data[this.flowType + '-' + this.fetchSort]
     },
     showNoContentTips() {
       return this.bangumiId || this.isMe

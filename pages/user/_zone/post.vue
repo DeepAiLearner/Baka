@@ -240,12 +240,12 @@ import Api from '~/api/userApi'
 
 export default {
   name: 'UserPost',
-  async asyncData(ctx) {
-    await ctx.store.dispatch('flow/initData', {
-      type: 'post',
+  async asyncData({ store, params }) {
+    await store.dispatch('flow2/initData', {
+      func: 'getUserPost',
       sort: 'news',
-      userZone: ctx.route.params.zone,
-      ctx
+      type: 'page',
+      id: params.zone
     })
   },
   components: {

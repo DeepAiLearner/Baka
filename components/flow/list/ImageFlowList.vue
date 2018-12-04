@@ -36,7 +36,7 @@ export default {
   mixins: [flowMixin],
   data() {
     return {
-      flowType: 'image'
+      flowType: 'getUserImage'
     }
   },
   methods: {

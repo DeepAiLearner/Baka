@@ -7,12 +7,12 @@ import ImageFlowList from '~/components/flow/list/ImageFlowList'
 
 export default {
   name: 'UserImage',
-  async asyncData(ctx) {
-    await ctx.store.dispatch('flow/initData', {
-      type: 'image',
+  async asyncData({ store, params }) {
+    await store.dispatch('flow2/initData', {
+      func: 'getUserImage',
+      type: 'page',
       sort: 'news',
-      userZone: ctx.route.params.zone,
-      ctx
+      id: params.zone
     })
   },
   components: {
