@@ -66,7 +66,7 @@ export const actions = {
     })
     const params = { count, ctx: this }
     if (type === 'page') {
-      params.page = 1
+      params.page = 0
     } else if (type === 'seenIds') {
       params.seen_ids = ''
     } else if (type === 'maxId') {
