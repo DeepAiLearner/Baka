@@ -9,115 +9,9 @@
   }
 
   .posts-of-reply {
-    li {
-      float: none;
-      padding: 10px;
-      position: relative;
-
-      &:not(:last-child) {
-        border-bottom: 1px dotted #e4e6eb;
-      }
-
-      .header {
-        position: relative;
-        height: 32px;
-        line-height: 32px;
-
-        .prefix {
-          float: left;
-        }
-
-        .title {
-          display: block;
-        }
-
-        .time {
-          float: right;
-          display: block;
-          line-height: 32px;
-          font-size: 12px;
-          position: relative;
-          margin-right: 12px;
-          margin-left: 10px;
-          color: #999;
-          z-index: 1;
-        }
-
-        .avatar {
-          display: block;
-          float: right;
-          margin-top: 4px;
-          position: relative;
-          z-index: 1;
-        }
-      }
-
-      .origin {
-        background-color: $color-gray-normal;
-        padding: 10px 20px;
-        margin: 10px 0;
-        border-radius: 5px;
-      }
-
-      .reply {
-        border-left: 5px solid $color-gray-normal;
-        padding: 0 20px;
-        margin: 10px 0;
-      }
-
-      .content {
-        margin-top: 3px;
-        color: #666;
-        font-size: 12px;
-        line-height: 22px;
-        max-height: 44px;
-        overflow: hidden;
-      }
-
-      .images {
-        height: 90px;
-        overflow: hidden;
-        margin-top: 10px;
-        margin-bottom: 15px;
-
-        .image-box {
-          margin-right: 10px;
-          height: 100%;
-          position: relative;
-          float: left;
-
-          &:after {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #fff;
-            opacity: 0;
-          }
-
-          &:hover {
-            &:after {
-              opacity: 0.1;
-            }
-          }
-
-          img {
-            height: 100%;
-            width: auto;
-          }
-        }
-      }
-    }
-
     .load-more-btn {
       margin-left: 10px;
     }
-  }
-
-  #no-content {
-    margin-top: 25px;
   }
 }
 </style>
@@ -129,173 +23,95 @@
       size="mini"
       @change="handleTabSwitch"
     >
-      <el-radio-button label="发表"/>
       <el-radio-button label="回复"/>
+      <el-radio-button label="发表"/>
     </el-radio-group>
-    <post-flow-list
-      v-show="tab === '发表'"
-      :user-zone="zone"
-      class="posts-of-mine"
-    />
     <div
       v-show="tab === '回复'"
       class="posts-of-reply"
     >
-      <ul>
-        <li
-          v-for="item in list"
-          :key="item.id"
-        >
-          <div class="header clearfix">
-            <span class="prefix">回复：</span>
-            <el-tooltip
-              :content="item.bangumi.name"
-              effect="dark"
-              placement="top"
-            >
-              <a
-                :href="$alias.bangumi(item.bangumi.id)"
-                class="avatar"
-                target="_blank"
-              >
-                <v-img
-                  :src="item.bangumi.avatar"
-                  :poster="true"
-                  size="24"
-                />
-              </a>
-            </el-tooltip>
-            <v-time
-              v-model="item.created_at"
-              class="time"
-            />
-            <a
-              :href="$alias.post(item.post.id, { 'comment-id': item.id })"
-              class="title href-fade-blue oneline"
-              target="_blank"
-              v-text="item.post.title"
-            />
-          </div>
-          <div class="origin">
-            <div
-              class="content"
-              v-html="item.post.content"
-            />
-            <div
-              v-if="item.post.images.length"
-              class="images clearfix"
-            >
-              <div
-                v-for="(image, index) in item.post.images"
-                :key="index"
-                class="image-box"
-              >
-                <v-img
-                  :src="image.url"
-                  width="auto"
-                  height="90"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="reply">
-            <div
-              class="content"
-              v-html="item.content"
-            />
-            <div
-              v-if="item.images.length"
-              class="images clearfix"
-            >
-              <div
-                v-for="(image, index) in item.images"
-                :key="index"
-                class="image-box"
-              >
-                <v-img
-                  :src="image.url"
-                  width="auto"
-                  height="90"
-                />
-              </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-      <no-content v-if="!list.length && noMore"/>
-      <load-more-btn
-        v-else
-        :auto="true"
-        :no-more="noMore"
-        :loading="loading"
-        @fetch="getUserPosts(false)"
-      />
+      <flow-list
+        :id="user.zone"
+        func="getUserPostReply"
+        type="page"
+        sort="news"
+      >
+        <ul slot-scope="{ flow }">
+          <post-reply-item
+            v-for="item in flow"
+            :key="item.id"
+            :item="item"
+          />
+        </ul>
+      </flow-list>
+    </div>
+    <div
+      v-show="tab === '发表'"
+      class="posts-of-mine"
+    >
+      <flow-list
+        :id="user.zone"
+        func="getUserPost"
+        type="page"
+        sort="news"
+      >
+        <ul slot-scope="{ flow }">
+          <post-flow-item
+            v-for="item in flow"
+            :key="item.id"
+            :user-zone="user.zone"
+            :item="item"
+          />
+        </ul>
+      </flow-list>
     </div>
   </div>
 </template>
 
 <script>
-import PostFlowList from '~/components/flow/list/PostFlowList'
-import Api from '~/api/userApi'
+import PostFlowItem from '~/components/flow/item/PostFlowItem'
+import PostReplyItem from '~/components/flow/item/PostReplyItem'
 
 export default {
   name: 'UserPost',
   async asyncData({ store, params }) {
     await store.dispatch('flow2/initData', {
-      func: 'getUserPost',
+      func: 'getUserPostReply',
       sort: 'news',
       type: 'page',
       id: params.zone
     })
   },
   components: {
-    PostFlowList
+    PostFlowItem,
+    PostReplyItem
   },
   data() {
     return {
-      tab: '发表',
-      postListType: 'reply',
-      list: [],
-      loading: false,
-      fetched: false,
-      noMore: false,
-      page: 0
+      tab: '回复'
     }
   },
   computed: {
-    zone() {
-      return this.$route.params.zone
+    user() {
+      return this.$store.state.users.show
     }
   },
   methods: {
     handleTabSwitch(label) {
       if (label === '回复') {
-        this.getUserPosts(true)
-      }
-    },
-    async getUserPosts(init = false) {
-      if (init && this.fetched) {
-        return
-      }
-      if (this.loading || this.noMore) {
-        return
-      }
-      this.loading = true
-      const api = new Api(this)
-      try {
-        const data = await api.replyPosts({
-          take: 10,
-          page: this.page,
-          zone: this.zone
+        this.$store.dispatch('flow2/initData', {
+          func: 'getUserPostReply',
+          sort: 'news',
+          type: 'page',
+          id: this.user.zone
         })
-        this.fetched = true
-        this.list = this.list.concat(data.list)
-        this.noMore = data.noMore
-        this.page++
-      } catch (e) {
-        this.$toast.error(e)
-      } finally {
-        this.loading = false
+      } else {
+        this.$store.dispatch('flow2/initData', {
+          func: 'getUserPost',
+          sort: 'news',
+          type: 'page',
+          id: this.user.zone
+        })
       }
     }
   }

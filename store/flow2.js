@@ -4,7 +4,6 @@ import * as API from '~/api2/flow2Api'
 const defaultListObj = {
   list: [],
   page: 0,
-  total: 0,
   noMore: false,
   nothing: false,
   loading: false,
@@ -12,17 +11,9 @@ const defaultListObj = {
   init: false
 }
 
-const defaultState = {
-  id: '', // 请求的 unique_id 的 value 是什么
-  type: '', // 请求的类型，如：lastId, page, seenIds
-  changing: '', // 在变化的是哪一个，如：seenIds 里面是 slug list 还是 id list
-  func: '', // 请求的函数名是什么
-  sort: '', // 请求的列表顺序是什么？如：active，news，hot，top_at，comment_at...
-  count: 12, // 每次获取的数据个数
-  data: {} // defaultListObj 都存到这个里面
-}
-
-export const state = () => merge({}, defaultState)
+export const state = () => ({
+  data: {}
+})
 
 export const actions = {
   // 1. 先检测当前列表是否有数据，如果有数据，清除
@@ -35,35 +26,35 @@ export const actions = {
       id = '',
       type, // required
       func, // required
-      changing = 'id',
       count = 12,
       sort,
       refresh = false,
       force = false
     }
   ) {
-    // 在前端，这个列表已经请求过了，然后切换 tab 再次发请求时，如果 error 了，就不再请求
-    const fieldName = `${func}-${sort}`
-    if (state.data[fieldName] && state.data[fieldName].error && !force) {
+    const fieldName = `${func}-${id}-${sort}`
+    const field = state.data[fieldName]
+    // 如果 error 了，就不再请求
+    if (field && field.error && !force) {
       return
     }
-    // 这个列表已经请求过了
-    if (state.data[fieldName] && state.data[fieldName].init) {
+    // 正在请求中，return
+    if (field && field.loading) {
+      return
+    }
+    // 这个 field 已经请求过了
+    if (field && field.init) {
       if (!refresh) {
         return
       }
-      commit('RESET_STATE')
+      commit('RESET_STATE', fieldName)
     }
-    commit('INIT_STATE', { func, sort })
-    commit('SET_LOADING', { func, sort })
-    commit('INIT_FETCH_PARAMS', {
+    commit('INIT_STATE', {
       id,
-      type,
       func,
-      changing,
-      count,
       sort
     })
+    commit('SET_LOADING', fieldName)
     const params = { count, ctx: this }
     if (type === 'page') {
       params.page = 0
@@ -80,9 +71,9 @@ export const actions = {
     }
     try {
       const data = await API[func](params)
-      data && commit('SET_DATA', { data, func, sort })
+      data && commit('SET_DATA', { data, fieldName, count })
     } catch (e) {
-      commit('SET_ERROR', { func, sort })
+      commit('SET_ERROR', fieldName)
     }
   },
   // 1.检测数据是否初始化，如果未初始化，报错，如果已初始化，检测参数，不匹配，报错
@@ -90,28 +81,22 @@ export const actions = {
   // 3.set store，设置 loading
   async loadMore(
     { state, commit },
-    { type, changing = 'id', id = '', func, sort }
+    { type, changing = '', id = '', func, sort, count = 12 }
   ) {
-    if (!type || !func || !sort) {
-      console.error('请求参数错误')
-      return
+    if (!type || !func) {
+      const error = new Error()
+      error.code = 0
+      error.message = '请求参数错误'
+      throw error
     }
-    if (
-      state.func !== func || // 不同的请求函数
-      state.changing !== changing || // 不同的列表
-      state.id !== id || // 两个不同用户
-      state.type !== type // 不同的请求类型
-    ) {
-      return
-    }
-    const fieldName = `${func}-${sort}`
+    const fieldName = `${func}-${id}-${sort}`
     const field = state.data[fieldName]
     if (field.loading || field.noMore) {
       return
     }
-    commit('SET_LOADING', { func, sort })
+    commit('SET_LOADING', fieldName)
     const params = {
-      count: state.count,
+      count,
       ctx: this
     }
     if (type === 'page') {
@@ -150,56 +135,67 @@ export const actions = {
     }
     try {
       const data = await API[func](params)
-      data && commit('SET_DATA', { data, func, sort })
+      data && commit('SET_DATA', { data, fieldName, count })
     } catch (e) {
-      commit('SET_ERROR', { func, sort })
+      commit('SET_ERROR', fieldName)
     }
   }
 }
 
 export const mutations = {
-  SET_ERROR(state, { func, sort }) {
-    const fieldName = `${func}-${sort}`
+  SET_ERROR(state, fieldName) {
     state.data[fieldName].error = true
     state.data[fieldName].loading = false
   },
-  // eslint-disable-next-line
-  RESET_STATE(state) {
-    state = merge({}, defaultState)
+  RESET_STATE(state, fieldName) {
+    state.data[fieldName] = merge(state.data[fieldName], defaultListObj)
   },
-  INIT_STATE(state, { func, sort }) {
+  INIT_STATE(state, { func, id, sort }) {
+    const fieldPrefix = `${func}-${id}-`
     const result = Object.assign({}, state.data)
-    result[`${func}-${sort}`] = merge({}, defaultListObj)
+    result[`${fieldPrefix}${sort}`] = merge({}, defaultListObj)
     state.data = result
   },
-  SET_LOADING(state, { func, sort }) {
-    state.data[`${func}-${sort}`].loading = true
+  SET_LOADING(state, fieldName) {
+    state.data[fieldName].loading = true
   },
-  INIT_FETCH_PARAMS(state, params) {
-    state = merge(state, params)
-  },
-  SET_DATA(state, { func, sort, data }) {
-    const fieldName = `${func}-${sort}`
+  SET_DATA(state, { data, fieldName, count }) {
+    const checkIsListObj = data => {
+      if (Array.isArray(data)) {
+        return false
+      }
+      return Object.keys(data).every(
+        key => ~['list', 'noMore', 'total'].indexOf(key)
+      )
+    }
     if (!state.data[fieldName]) {
       return
     }
+    const isListObj = checkIsListObj(data)
     if (state.data[fieldName].init) {
-      state.data[fieldName].list = state.data[fieldName].list.concat(data.list)
+      state.data[fieldName].list = isListObj
+        ? state.data[fieldName].list.concat(data.list)
+        : state.data[fieldName].list.concat(data)
     } else {
       state.data[fieldName].init = true
-      state.data[fieldName].list = data.list
-      state.data[fieldName].nothing = data.total === 0
+      state.data[fieldName].list = isListObj ? data.list : data
+      state.data[fieldName].nothing = isListObj
+        ? data.total === 0
+        : data.length === 0
     }
     state.data[fieldName].page++
-    state.data[fieldName].noMore = data.noMore
-    state.data[fieldName].total = data.total
+    state.data[fieldName].noMore = isListObj
+      ? data.noMore
+      : state.type === 'seenIds'
+        ? data.length === 0
+        : data.length < count
     state.data[fieldName].loading = false
     state.data[fieldName].error = false
   }
 }
 
 export const getters = {
-  getFlow: state => (func, sort) => {
-    return state.data[`${func}-${sort}`]
+  getFlow: state => (func, id = '', sort) => {
+    return state.data[`${func}-${id}-${sort}`]
   }
 }

@@ -165,6 +165,12 @@ export const getUserPost = ({ ctx, id, page, count, order_by }) => {
   })
 }
 
+export const getUserPostReply = ({ ctx, id, count, page }) => {
+  return ctx.$axios.get(`user/${id}/posts/reply`, {
+    params: { count, page }
+  })
+}
+
 export const getUserImage = ({ ctx, id, page, count, order_by }) => {
   return getFlowList(ctx, {
     type: 'image',

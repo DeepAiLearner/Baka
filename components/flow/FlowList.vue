@@ -1,5 +1,8 @@
 <template>
-  <div class="flow-list-container">
+  <div
+    v-if="source"
+    class="flow-list-container"
+  >
     <slot :flow="source.list"/>
     <flow-state
       :auto="auto"
@@ -65,7 +68,7 @@ export default {
   },
   computed: {
     source() {
-      return this.$store.getters['flow2/getFlow'](this.func, this.sort)
+      return this.$store.getters['flow2/getFlow'](this.func, this.id, this.sort)
     }
   },
   methods: {

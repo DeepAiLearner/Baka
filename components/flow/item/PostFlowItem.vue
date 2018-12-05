@@ -1,5 +1,5 @@
 <style lang="scss">
-.post-show-item {
+.post-flow-item {
   float: none;
   padding: 10px 10px 10px 65px;
   position: relative;
@@ -213,7 +213,7 @@
 </style>
 
 <template>
-  <li class="post-show-item">
+  <li class="post-flow-item">
     <div class="header clearfix">
       <user-card
         v-if="item.user"
