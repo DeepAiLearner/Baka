@@ -1,9 +1,23 @@
 <template>
-  <image-flow-list :user-zone="zone"/>
+  <div>
+    <flow-list
+      :id="user.zone"
+      func="getUserImage"
+      type="page"
+      sort="news"
+    >
+      <image-waterfall-flow
+        slot-scope="{ flow }"
+        :list="flow"
+        :user-zone="user.zone"
+      />
+
+    </flow-list>
+  </div>
 </template>
 
 <script>
-import ImageFlowList from '~/components/flow/list/ImageFlowList'
+import ImageWaterfallFlow from '~/components/image/ImageWaterfallFlow'
 
 export default {
   name: 'UserImage',
@@ -16,11 +30,11 @@ export default {
     })
   },
   components: {
-    ImageFlowList
+    ImageWaterfallFlow
   },
   computed: {
-    zone() {
-      return this.$route.params.zone
+    user() {
+      return this.$store.state.users.show
     }
   }
 }

@@ -1,26 +1,39 @@
 <template>
-  <score-flow-list :user-zone="zone"/>
+  <flow-list
+    :id="user.zone"
+    func="getUserScore"
+    type="page"
+    sort="news"
+  >
+    <ul slot-scope="{ flow }">
+      <score-flow-item
+        v-for="item in flow"
+        :key="item.id"
+        :item="item"
+      />
+    </ul>
+  </flow-list>
 </template>
 
 <script>
-import ScoreFlowList from '~/components/flow/list/ScoreFlowList'
+import ScoreFlowItem from '~/components/flow/item/ScoreFlowItem'
 
 export default {
   name: 'UserScore',
-  async asyncData({ store, route, ctx }) {
-    await store.dispatch('flow/initData', {
-      type: 'score',
+  async asyncData({ store, params }) {
+    await store.dispatch('flow2/initData', {
+      func: 'getUserScore',
+      type: 'page',
       sort: 'news',
-      userZone: route.params.zone,
-      ctx
+      id: params.zone
     })
   },
   components: {
-    ScoreFlowList
+    ScoreFlowItem
   },
   computed: {
-    zone() {
-      return this.$route.params.zone
+    user() {
+      return this.$store.state.users.show
     }
   }
 }

@@ -22,7 +22,7 @@
       v-else-if="noMore"
       name="no-more"
     >
-      no more
+      没有更多了，休息一下吧ヾ(*￣▽￣*)/
     </slot>
     <slot
       v-else-if="loading"
