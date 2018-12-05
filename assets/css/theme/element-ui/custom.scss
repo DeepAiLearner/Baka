@@ -106,7 +106,7 @@
 
       &:hover {
         border-color: $color-blue-normal;
-        background-color: rgba(66,192,46,.05);
+        background-color: rgba($color-blue-normal,.1);
       }
     }
   }
