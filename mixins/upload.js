@@ -16,7 +16,7 @@ export default {
         'image/gif'
       ].toString(),
       imageUploadAction: 'https://upload.qiniup.com',
-      imagePrefix: process.env.cdnHost.image
+      imagePrefix: 'https://image.calibur.tv'
     }
   },
   methods: {

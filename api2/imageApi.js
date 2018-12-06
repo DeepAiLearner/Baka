@@ -1,5 +1,9 @@
 export const getCaptcha = ctx => {
-  return ctx.$axios.get('image/captcha')
+  return ctx.$axios.get(
+    `image/captcha?t=${Date.now()}-${Math.random()
+      .toString(36)
+      .substring(3, 6)}`
+  )
 }
 
 export const getUpToken = ctx => {

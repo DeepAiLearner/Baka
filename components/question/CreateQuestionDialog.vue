@@ -188,6 +188,7 @@ export default {
           }
           this.submitting = true
           this.$captcha({
+            ctx: this,
             success: async ({ data }) => {
               const api = new Api(this)
               try {
@@ -210,10 +211,6 @@ export default {
                 this.$toast.error(err)
                 this.submitting = false
               }
-            },
-            error: e => {
-              this.submitting = false
-              this.$toast.error(e)
             },
             close: () => {
               this.submitting = false

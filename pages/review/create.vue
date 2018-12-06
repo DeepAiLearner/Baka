@@ -269,11 +269,9 @@ export default {
         this.submit(richContent, scores)
       } else {
         this.$captcha({
+          ctx: this,
           success: ({ data }) => {
             this.submit(richContent, scores, data)
-          },
-          error: e => {
-            this.$toast.error(e)
           }
         })
       }

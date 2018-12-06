@@ -22,7 +22,7 @@ const createRequestKey = (method, args) => {
 
 export default ctx => {
   const http = axios.create({
-    baseURL: process.env.baseUrl,
+    baseURL: process.env.API_URL_BROWSER,
     headers: { Accept: 'application/x.api.latest+json' },
     timeout: timeout
   })

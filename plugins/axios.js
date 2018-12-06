@@ -17,6 +17,10 @@ export default ({ $axios, app }) => {
   }
 
   $axios.onRequest(config => {
+    config.baseURL = isClient
+      ? process.env.API_URL_BROWSER
+      : process.env.API_URL
+
     const method = config.method.toLocaleUpperCase()
     if (isClient) {
       M.sentry.setRequestStack({
@@ -53,10 +57,7 @@ export default ({ $axios, app }) => {
         message: err.message
       })
       Message.error(err.message)
-    } else {
-      if (isDev) {
-        console.log(err)
-      }
     }
+    return Promise.reject(err)
   })
 }

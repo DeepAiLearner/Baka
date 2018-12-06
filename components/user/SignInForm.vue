@@ -186,6 +186,7 @@ export default {
       }
       this.loading = true
       this.$captcha({
+        ctx: this,
         success: ({ data }) => {
           const api = new UserApi()
           api
@@ -208,10 +209,6 @@ export default {
         },
         close: () => {
           this.loading = false
-        },
-        error: err => {
-          this.loading = false
-          this.$toast.error(err)
         }
       })
     },

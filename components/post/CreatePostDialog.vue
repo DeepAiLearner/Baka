@@ -219,6 +219,7 @@ export default {
       this.$refs.forms.validate(valid => {
         if (valid) {
           this.$captcha({
+            ctx: this,
             success: async ({ data }) => {
               try {
                 const api = new PostApi(this)
@@ -243,10 +244,6 @@ export default {
                 this.$toast.error(err)
                 this.submitting = false
               }
-            },
-            error: e => {
-              this.submitting = false
-              this.$toast.error(e)
             },
             close: () => {
               this.submitting = false

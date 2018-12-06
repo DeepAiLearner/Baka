@@ -4,7 +4,7 @@ import parseCookie from '~/assets/js/parseCookie'
 class Http {
   constructor(ctx) {
     this.instance = axios.create({
-      baseURL: process.env.baseUrl,
+      baseURL: process.env.API_URL,
       headers: {
         Accept: 'application/x.api.latest+json',
         Authorization: `Bearer ${parseCookie(ctx.req)}`

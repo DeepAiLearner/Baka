@@ -1,16 +1,14 @@
-import Api from '~/api/imageApi'
 import './geetest'
+import { getCaptcha } from '~/api2/imageApi'
 
 export default params => {
-  const { type, elem, success, error, ready, async, close } =
+  const { type, elem, success, error, ready, async, close, ctx } =
     typeof params === 'object' ? params : {}
-  const api = new Api()
   const product = type || 'bind'
-  api
-    .getCaptcha()
+  getCaptcha(ctx)
     .then(data => {
       if (!window.initGeetest) {
-        error && error('验证码加载失败，请刷新网页重试')
+        ctx.$toast.error('验证码加载失败，请刷新网页重试')
         return
       }
       window.initGeetest(
@@ -62,8 +60,10 @@ export default params => {
                   captcha
                 })
           })
-          captcha.onError(err => {
-            error && error(err)
+          captcha.onError(e => {
+            console.log(e)
+            ctx.$toast.error('图形验证码出错了')
+            close && close()
           })
           captcha.onClose(() => {
             close && close()

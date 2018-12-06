@@ -262,6 +262,7 @@ export default {
     getRegisterAuthCode() {
       this.step = 1
       this.$captcha({
+        ctx: this,
         success: async ({ data }) => {
           const api = new UserApi()
           try {
@@ -287,10 +288,6 @@ export default {
         },
         close: () => {
           this.step = 0
-        },
-        error: err => {
-          this.step = 0
-          this.$toast.error(err)
         }
       })
     },

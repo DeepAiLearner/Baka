@@ -11,8 +11,10 @@ const injectScript = require('./.script')
 module.exports = {
   mode: 'universal',
   env: {
-    baseUrl: process.env.BASE_URL,
-    cdnHost: qiniu.host,
+    // API_URL: isDev ? 'http://localhost:3099/' : 'http://localhost/',
+    // API_URL_BROWSER: isDev ? 'http://localhost:3099/' : 'https://api.calibur.tv/',
+    API_URL: 'https://api.calibur.tv/',
+    API_URL_BROWSER: 'https://api.calibur.tv/',
     SENTRY_URL: 'https://c89b4ce2cfbf44e3bab148e0b7fa31df@sentry.io/1243412',
     RELEASE: new Date().toLocaleString()
   },
@@ -163,7 +165,7 @@ module.exports = {
         camelCase: true
       }
     },
-    publicPath: isDev ? '/_nuxt/' : `${qiniu.host.static}${qiniu.key_prefix}`,
+    publicPath: isDev ? '/_nuxt/' : `${qiniu.host}${qiniu.key_prefix}`,
     babel: {
       plugins: ['babel-plugin-lodash']
     }

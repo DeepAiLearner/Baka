@@ -180,12 +180,9 @@ export default {
         this.submit(richContent)
       } else {
         this.$captcha({
+          ctx: this,
           success: ({ data }) => {
             this.submit(richContent, data)
-          },
-          error: e => {
-            this.$toast.error(e)
-            this.saving = false
           },
           close: () => {
             this.saving = false

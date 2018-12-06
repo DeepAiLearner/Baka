@@ -9,9 +9,5 @@
   "log_level"          :   "info",
   "log_stdout"         :   true,
   "file_type"          :   0,
-  "host": {
-    "image": "https://image.calibur.tv/",
-    "static": "https://static.calibur.tv/",
-    "video": "https://video.calibur.tv/"
-  }
+  "host"               :   "https://static.calibur.tv/"
 }
