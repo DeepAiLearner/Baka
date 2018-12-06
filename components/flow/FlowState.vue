@@ -24,7 +24,7 @@ $font-size: 14px;
       width: 20px;
       height: 20px;
       border-radius: 20px;
-      border: 2px solid $color-jianshu;
+      border: 2px solid $color-text-normal;
       border-bottom-color: transparent;
       vertical-align: middle;
       animation: rolling 0.8s infinite linear;
