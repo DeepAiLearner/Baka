@@ -1,4 +1,4 @@
-import { merge } from 'lodash'
+import Vue from 'vue'
 import * as API from '~/api2/flow2Api'
 
 const defaultListObj = {
@@ -11,9 +11,7 @@ const defaultListObj = {
   init: false
 }
 
-export const state = () => ({
-  data: {}
-})
+export const state = () => ({})
 
 export const actions = {
   // 1. 先检测当前列表是否有数据，如果有数据，清除
@@ -33,7 +31,7 @@ export const actions = {
     }
   ) {
     const fieldName = `${func}-${id}-${sort}`
-    const field = state.data[fieldName]
+    const field = state[fieldName]
     // 如果 error 了，就不再请求
     if (field && field.error && !force) {
       return
@@ -47,13 +45,8 @@ export const actions = {
       if (!refresh) {
         return
       }
-      commit('RESET_STATE', fieldName)
     }
-    commit('INIT_STATE', {
-      id,
-      func,
-      sort
-    })
+    commit('INIT_STATE', fieldName)
     commit('SET_LOADING', fieldName)
     const params = { count, ctx: this }
     if (type === 'page') {
@@ -90,7 +83,7 @@ export const actions = {
       throw error
     }
     const fieldName = `${func}-${id}-${sort}`
-    const field = state.data[fieldName]
+    const field = state[fieldName]
     if (field.loading || field.noMore) {
       return
     }
@@ -144,20 +137,14 @@ export const actions = {
 
 export const mutations = {
   SET_ERROR(state, fieldName) {
-    state.data[fieldName].error = true
-    state.data[fieldName].loading = false
+    state[fieldName].error = true
+    state[fieldName].loading = false
   },
-  RESET_STATE(state, fieldName) {
-    state.data[fieldName] = merge(state.data[fieldName], defaultListObj)
-  },
-  INIT_STATE(state, { func, id, sort }) {
-    const fieldPrefix = `${func}-${id}-`
-    const result = Object.assign({}, state.data)
-    result[`${fieldPrefix}${sort}`] = merge({}, defaultListObj)
-    state.data = result
+  INIT_STATE(state, fieldName) {
+    Vue.set(state, fieldName, Object.assign({}, defaultListObj))
   },
   SET_LOADING(state, fieldName) {
-    state.data[fieldName].loading = true
+    state[fieldName].loading = true
   },
   SET_DATA(state, { data, fieldName, count }) {
     const checkIsListObj = data => {
@@ -168,34 +155,34 @@ export const mutations = {
         key => ~['list', 'noMore', 'total'].indexOf(key)
       )
     }
-    if (!state.data[fieldName]) {
+    if (!state[fieldName]) {
       return
     }
     const isListObj = checkIsListObj(data)
-    if (state.data[fieldName].init) {
-      state.data[fieldName].list = isListObj
-        ? state.data[fieldName].list.concat(data.list)
-        : state.data[fieldName].list.concat(data)
+    if (state[fieldName].init) {
+      state[fieldName].list = isListObj
+        ? state[fieldName].list.concat(data.list)
+        : state[fieldName].list.concat(data)
     } else {
-      state.data[fieldName].init = true
-      state.data[fieldName].list = isListObj ? data.list : data
-      state.data[fieldName].nothing = isListObj
+      state[fieldName].init = true
+      state[fieldName].list = isListObj ? data.list : data
+      state[fieldName].nothing = isListObj
         ? data.total === 0
         : data.length === 0
     }
-    state.data[fieldName].page++
-    state.data[fieldName].noMore = isListObj
+    state[fieldName].page++
+    state[fieldName].noMore = isListObj
       ? data.noMore
       : state.type === 'seenIds'
         ? data.length === 0
         : data.length < count
-    state.data[fieldName].loading = false
-    state.data[fieldName].error = false
+    state[fieldName].loading = false
+    state[fieldName].error = false
   }
 }
 
 export const getters = {
-  getFlow: state => (func, id = '', sort) => {
-    return state.data[`${func}-${id}-${sort}`]
+  getFlow: state => (func, sort, id = '') => {
+    return state[`${func}-${id}-${sort}`]
   }
 }

@@ -1,41 +1,101 @@
 <style lang="scss" module>
-.load-btn {
-  text-align: center;
+$height: 40px;
+$font-size: 14px;
+
+.flow-state {
+  .error,
+  .no-more,
+  .nothing,
+  .fetch-btn,
+  .loading {
+    text-align: center;
+    height: $height;
+    line-height: $height;
+
+    span {
+      font-size: $font-size;
+    }
+  }
+
+  .loading {
+    i {
+      display: inline-block;
+      margin-right: 8px;
+      width: 20px;
+      height: 20px;
+      border-radius: 20px;
+      border: 2px solid $color-jianshu;
+      border-bottom-color: transparent;
+      vertical-align: middle;
+      animation: rolling 0.8s infinite linear;
+    }
+
+    span {
+      vertical-align: middle;
+    }
+  }
+
+  .fetch-btn {
+    width: 100%;
+    font-size: $font-size;
+  }
+
+  @include keyframes(rolling) {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 }
 </style>
 
 <template>
-  <div :class="$style.loadBtn">
-    <slot
+  <div :class="$style.flowState">
+    <div
       v-if="error"
-      name="error"
+      @click="fetch"
     >
-      error
-    </slot>
+      <slot name="error">
+        <div :class="$style.error">
+          <span>出错了，点击重试</span>
+        </div>
+      </slot>
+    </div>
     <slot
       v-else-if="nothing"
       name="nothing"
     >
-      nothing
+      <div :class="$style.nothing">
+        <span>这里什么都没有</span>
+      </div>
     </slot>
     <slot
       v-else-if="noMore"
       name="no-more"
     >
-      没有更多了，休息一下吧ヾ(*￣▽￣*)/
+      <div :class="$style.noMore">
+        <span>没有更多了</span>
+      </div>
     </slot>
     <slot
       v-else-if="loading"
       name="loading"
     >
-      加载中…
+      <div :class="$style.loading">
+        <i/>
+        <span>加载中…</span>
+      </div>
     </slot>
-    <button
-      v-else-if="!auto"
-      @click="fetch"
-    >
-      点击加载更多
-    </button>
+    <div v-else-if="!auto">
+      <button
+        :class="$style.fetchBtn"
+        @click="fetch"
+      >
+        点击加载更多
+      </button>
+    </div>
   </div>
 </template>
 
@@ -43,7 +103,7 @@
 import Utils from '~/components/common/ImageLazyLoad/utils'
 
 export default {
-  name: 'LoadBtn',
+  name: 'FlowState',
   props: {
     auto: {
       type: Boolean,

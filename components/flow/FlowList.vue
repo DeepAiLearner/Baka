@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="source"
-    class="flow-list-container"
-  >
+  <div v-if="source">
     <slot :flow="source.list"/>
     <flow-state
       :auto="auto"
@@ -34,41 +31,17 @@
 
 <script>
 import FlowState from './FlowState'
+import flowMixin from './flowMixin'
 
 export default {
   name: 'FlowList',
   components: {
     FlowState
   },
-  props: {
-    id: {
-      type: [Number, String],
-      default: ''
-    },
-    func: {
-      required: true,
-      type: String
-    },
-    type: {
-      required: true,
-      type: String
-    },
-    sort: {
-      required: true,
-      type: String
-    },
-    changing: {
-      type: String,
-      default: 'id'
-    },
-    auto: {
-      type: Boolean,
-      default: true
-    }
-  },
+  mixins: [flowMixin],
   computed: {
     source() {
-      return this.$store.getters['flow2/getFlow'](this.func, this.id, this.sort)
+      return this.$store.getters['flow2/getFlow'](this.func, this.sort, this.id)
     }
   },
   methods: {
